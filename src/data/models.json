@@ -1222,5 +1222,39 @@
     "active": true,
     "limitStatus": "known",
     "verification": "auto_extracted"
+  },
+  {
+    "id": "Iceman Contributor Free (Go)",
+    "displayName": "Iceman Contributor Free",
+    "provider": "OpenCode",
+    "monthlyLimitUsd": null,
+    "limitStatus": "unlimited",
+    "unlimited": true,
+    "priceInputUsd": 0,
+    "priceOutputUsd": 0,
+    "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
+    "checkedAt": "2026-10-27T10:16:54.967Z",
+    "sourceType": "official_document",
+    "verification": "auto_extracted",
+    "confidence": "medium",
+    "notes": "Go plan",
+    "active": true
+  },
+  {
+    "id": "Iceman Contributor Free (Go Plus)",
+    "displayName": "Iceman Contributor Free",
+    "provider": "OpenCode",
+    "monthlyLimitUsd": null,
+    "limitStatus": "unlimited",
+    "unlimited": true,
+    "priceInputUsd": 0,
+    "priceOutputUsd": 0,
+    "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
+    "checkedAt": "2026-10-27T10:16:54.970Z",
+    "sourceType": "official_document",
+    "verification": "auto_extracted",
+    "confidence": "medium",
+    "notes": "Go Plus plan",
+    "active": true
   }
 ]
