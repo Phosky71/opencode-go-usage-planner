@@ -1,62 +1,75 @@
 // src/ui/components/Calculator.tsx
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useCatalog } from '../../context/CatalogContext';
 import { usePlan } from '../../context/PlanContext';
-import { Model, ConsumptionEntry } from '../../domain/models';
+import { Model, formatMonthlyLimit, getLimitStatus } from '../../domain/models';
 import {
   computeContribution,
   totalContribution,
   computeDifference,
   hypotheticalContribution,
 } from '../../domain/calculations';
-
-interface Hypothesis {
-  modelId: string;
-  amountUsd: number;
-}
+import { useScenarioPersistence } from '../hooks/useScenarioPersistence';
 
 export const Calculator: React.FC = () => {
   const { catalog } = useCatalog();
   const { plan } = usePlan();
-  const [entries, setEntries] = useState<ConsumptionEntry[]>([]);
+  const {
+    entries,
+    observed,
+    setObserved,
+    hypotheses,
+    budget,
+    setBudget,
+    budgetAllocations,
+    hasData,
+    storageNotice,
+    addEntry: persistEntry,
+    removeEntry,
+    clearEntries: clearStoredEntries,
+    addHypothesis: persistHypothesis,
+    removeHypothesis,
+    clearHypotheses,
+    addBudgetModel,
+    updateAllocation,
+    removeBudgetModel,
+    exportScenario,
+    importScenario,
+    clearSavedScenario,
+  } = useScenarioPersistence(catalog);
+
   const [modelId, setModelId] = useState('');
   const [consumptionUsd, setConsumptionUsd] = useState('');
-  const [observed, setObserved] = useState('');
   const [result, setResult] = useState<{
     total: number;
     diff: number;
     hasUnlimited: boolean;
+    hasUnknown: boolean;
     entryCount: number;
     calculatedCount: number;
     remaining: number;
   } | null>(null);
 
   // Hypotheses (scenario simulation)
-  const [hypotheses, setHypotheses] = useState<Hypothesis[]>([]);
   const [hypModelId, setHypModelId] = useState('');
   const [hypAmount, setHypAmount] = useState('');
-
-  // Budget planner
-  const [budget, setBudget] = useState('');
-  const [budgetAllocations, setBudgetAllocations] = useState<Record<string, number>>({});
+  const [importError, setImportError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const planNote = plan === 'go' ? 'Go plan' : 'Go Plus plan';
   const planCatalog = catalog.filter(m => m.notes === planNote);
 
   const addEntry = () => {
     if (!modelId || !consumptionUsd) return;
-    const entry: ConsumptionEntry = { modelId, consumptionUsd: Number(consumptionUsd) };
-    setEntries(prev => [...prev, entry]);
+    const value = Number(consumptionUsd);
+    if (!Number.isFinite(value) || value < 0) return;
+    persistEntry(modelId, value);
     setModelId('');
     setConsumptionUsd('');
   };
 
-  const removeEntry = (index: number) => {
-    setEntries(prev => prev.filter((_, i) => i !== index));
-  };
-
   const clearEntries = () => {
-    setEntries([]);
+    clearStoredEntries();
     setResult(null);
   };
 
@@ -77,26 +90,24 @@ export const Calculator: React.FC = () => {
     const diff = observed ? computeDifference(total, Number(observed)) : 0;
     const hasUnlimited = entries.some(e => {
       const model = catalog.find(m => m.id === e.modelId);
-      return model?.unlimited === true;
+      return model ? getLimitStatus(model) === 'unlimited' : false;
+    });
+    const hasUnknown = entries.some(e => {
+      const model = catalog.find(m => m.id === e.modelId);
+      return model ? getLimitStatus(model) === 'unknown' : true;
     });
     const remaining = 100 - total;
-    setResult({ total, diff, hasUnlimited, entryCount: entries.length, calculatedCount: contributions.length, remaining });
+    setResult({ total, diff, hasUnlimited, hasUnknown, entryCount: entries.length, calculatedCount: contributions.length, remaining });
   };
 
   // Hypotheses
   const addHypothesis = () => {
     if (!hypModelId || !hypAmount) return;
-    setHypotheses(prev => [...prev, { modelId: hypModelId, amountUsd: Number(hypAmount) }]);
+    const value = Number(hypAmount);
+    if (!Number.isFinite(value) || value < 0) return;
+    persistHypothesis(hypModelId, value);
     setHypModelId('');
     setHypAmount('');
-  };
-
-  const removeHypothesis = (index: number) => {
-    setHypotheses(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const clearHypotheses = () => {
-    setHypotheses([]);
   };
 
   // Combined total: registered + hypotheses
@@ -113,7 +124,7 @@ export const Calculator: React.FC = () => {
   const combinedRemaining = 100 - combinedTotal;
 
   // Budget planner
-  const budgetNum = Number(budget) || 0;
+  const budgetNum = Math.max(0, Number(budget) || 0);
   const budgetModels = Object.keys(budgetAllocations);
   const budgetContributions = budgetModels.map(modelId => {
     const model = catalog.find(m => m.id === modelId);
@@ -127,22 +138,26 @@ export const Calculator: React.FC = () => {
     if (c.contribution === null) return sum;
     return sum + c.contribution;
   }, 0);
+  const assignedBudget = budgetModels.reduce((sum, modelId) => sum + (budgetAllocations[modelId] || 0), 0);
+  const unassignedBudget = budgetNum - assignedBudget;
+  const budgetExcess = Math.max(0, assignedBudget - budgetNum);
 
-  const updateAllocation = (modelId: string, amount: number) => {
-    setBudgetAllocations(prev => ({ ...prev, [modelId]: amount }));
+  const handleImport = async (file: File | undefined) => {
+    if (!file) return;
+    if (hasData && !window.confirm('Esto sustituirá el escenario actual. ¿Continuar?')) {
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+    const outcome = await importScenario(file);
+    setImportError(outcome.ok ? null : outcome.error ?? 'No se pudo importar el archivo.');
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const addBudgetModel = (modelId: string) => {
-    if (budgetAllocations[modelId] !== undefined) return;
-    setBudgetAllocations(prev => ({ ...prev, [modelId]: 0 }));
-  };
-
-  const removeBudgetModel = (modelId: string) => {
-    setBudgetAllocations(prev => {
-      const next = { ...prev };
-      delete next[modelId];
-      return next;
-    });
+  const handleClearSaved = () => {
+    if (!window.confirm('Se eliminarán el escenario y los datos guardados en este navegador. ¿Continuar?')) return;
+    clearSavedScenario();
+    setResult(null);
+    setImportError(null);
   };
 
   return (
@@ -155,6 +170,42 @@ export const Calculator: React.FC = () => {
         Fórmula: <code className="bg-white/10 px-1.5 py-0.5 rounded text-cyan-400 text-xs">P_i = 100 × consumo / límite_mensual</code>
       </p>
 
+      <div className="mb-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-white/50">Escenario local</p>
+            <p className="mt-1 text-xs text-white/50">
+              Se guarda automáticamente en este navegador. No se envía a ningún servidor.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={exportScenario} className="operia-btn-secondary text-xs">
+              Exportar JSON
+            </button>
+            <button type="button" onClick={() => fileInputRef.current?.click()} className="operia-btn-secondary text-xs">
+              Importar JSON
+            </button>
+            <button type="button" onClick={handleClearSaved} className="operia-btn-secondary text-xs">
+              Borrar datos
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              aria-label="Importar escenario JSON"
+              onChange={(event) => void handleImport(event.target.files?.[0])}
+            />
+          </div>
+        </div>
+        {storageNotice && (
+          <p className="mt-2 text-xs text-amber-300/80" role="status">{storageNotice}</p>
+        )}
+        {importError && (
+          <p className="mt-2 text-xs text-red-400" role="alert">{importError}</p>
+        )}
+      </div>
+
       {/* Add entry */}
       <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <select
@@ -165,8 +216,8 @@ export const Calculator: React.FC = () => {
         >
           <option value="">Selecciona modelo</option>
           {planCatalog.map((m: Model) => (
-            <option key={m.id} value={m.id}>
-              {m.displayName} ({m.unlimited ? 'Ilimitado' : `$${m.monthlyLimitUsd}`})
+            <option key={m.id} value={m.id} disabled={getLimitStatus(m) === 'unknown'}>
+              {m.displayName} ({formatMonthlyLimit(m)})
             </option>
           ))}
         </select>
@@ -200,7 +251,8 @@ export const Calculator: React.FC = () => {
                     {contrib?.contributionPercent !== null && contrib?.contributionPercent !== undefined && (
                       <span className="text-white/50 ml-2">→ {contrib.contributionPercent.toFixed(2)}%</span>
                     )}
-                    {model?.unlimited && <span className="text-amber-400 ml-2">(Ilimitado)</span>}
+                    {model && getLimitStatus(model) === 'unlimited' && <span className="text-amber-400 ml-2">(Ilimitado)</span>}
+                    {model && getLimitStatus(model) === 'unknown' && <span className="text-amber-400 ml-2">(Límite desconocido)</span>}
                   </span>
                   <button
                     onClick={() => removeEntry(i)}
@@ -239,7 +291,7 @@ export const Calculator: React.FC = () => {
         </button>
         {entries.length > 0 && (
           <button onClick={clearEntries} className="operia-btn-secondary">
-            Limpiar escenario
+            Limpiar consumos
           </button>
         )}
       </div>
@@ -257,6 +309,11 @@ export const Calculator: React.FC = () => {
             <p className="text-amber-400 text-sm">
               ⚠️ Total parcial: {result.calculatedCount} de {result.entryCount} modelos calculados.
               Los modelos ilimitados no tienen contribución porcentual definida.
+            </p>
+          )}
+          {result.hasUnknown && (
+            <p className="text-amber-400 text-sm">
+              ⚠️ Hay modelos con límite desconocido: no se incluyen en el cálculo. No los interpretes como gratuitos.
             </p>
           )}
           {observed && (
@@ -293,8 +350,8 @@ export const Calculator: React.FC = () => {
           >
             <option value="">Selecciona modelo</option>
             {planCatalog.map((m: Model) => (
-              <option key={m.id} value={m.id}>
-                {m.displayName} ({m.unlimited ? 'Ilimitado' : `$${m.monthlyLimitUsd}`})
+              <option key={m.id} value={m.id} disabled={getLimitStatus(m) === 'unknown'}>
+                {m.displayName} ({formatMonthlyLimit(m)})
               </option>
             ))}
           </select>
@@ -324,7 +381,8 @@ export const Calculator: React.FC = () => {
                     <span className="text-sm text-white/90">
                       {model?.displayName}: <strong className="text-cyan-400">${h.amountUsd}</strong>
                       {contrib !== null && <span className="text-white/50 ml-2">→ +{contrib.toFixed(2)}%</span>}
-                      {model?.unlimited && <span className="text-amber-400 ml-2">(Ilimitado)</span>}
+                      {model && getLimitStatus(model) === 'unlimited' && <span className="text-amber-400 ml-2">(Ilimitado)</span>}
+                      {model && getLimitStatus(model) === 'unknown' && <span className="text-amber-400 ml-2">(Límite desconocido)</span>}
                     </span>
                     <button
                       onClick={() => removeHypothesis(i)}
@@ -379,6 +437,37 @@ export const Calculator: React.FC = () => {
             step="1"
           />
         </div>
+
+        {(budgetNum > 0 || assignedBudget > 0) && (
+          <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="rounded-lg border border-white/5 bg-white/5 p-2.5">
+              <p className="text-[10px] uppercase tracking-wide text-white/40">Presupuesto</p>
+              <p className="text-sm font-semibold text-white">${budgetNum.toFixed(2)}</p>
+            </div>
+            <div className="rounded-lg border border-white/5 bg-white/5 p-2.5">
+              <p className="text-[10px] uppercase tracking-wide text-white/40">Asignado</p>
+              <p className="text-sm font-semibold text-cyan-300">${assignedBudget.toFixed(2)}</p>
+            </div>
+            <div className="rounded-lg border border-white/5 bg-white/5 p-2.5">
+              <p className="text-[10px] uppercase tracking-wide text-white/40">No asignado</p>
+              <p className="text-sm font-semibold text-white/80">${unassignedBudget.toFixed(2)}</p>
+            </div>
+            <div className={`rounded-lg border p-2.5 ${budgetExcess > 0 ? 'border-red-500/30 bg-red-500/10' : 'border-white/5 bg-white/5'}`}>
+              <p className="text-[10px] uppercase tracking-wide text-white/40">Exceso</p>
+              <p className={`text-sm font-semibold ${budgetExcess > 0 ? 'text-red-300' : 'text-white/80'}`}>
+                ${budgetExcess.toFixed(2)}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {budgetExcess > 0 && (
+          <p className="mb-3 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-xs text-red-300" role="alert">
+            Has asignado ${budgetExcess.toFixed(2)} más que el presupuesto total. No se recortan
+            ni redistribuyen asignaciones automáticamente; ajusta los importes o el presupuesto.
+          </p>
+        )}
+
         <div className="mb-3">
           <label className="block text-sm font-medium text-white/70 mb-1">
             Añadir modelo al presupuesto:
@@ -386,13 +475,17 @@ export const Calculator: React.FC = () => {
           <select
             value=""
             onChange={e => { if (e.target.value) addBudgetModel(e.target.value); }}
-            className="operia-select"
+            className="operia-select w-full"
             aria-label="Añadir modelo al presupuesto"
           >
             <option value="">Selecciona modelo</option>
             {planCatalog.map((m: Model) => (
-              <option key={m.id} value={m.id} disabled={budgetAllocations[m.id] !== undefined}>
-                {m.displayName}
+              <option
+                key={m.id}
+                value={m.id}
+                disabled={budgetAllocations[m.id] !== undefined || getLimitStatus(m) === 'unknown'}
+              >
+                {m.displayName} ({formatMonthlyLimit(m)})
               </option>
             ))}
           </select>
@@ -408,7 +501,10 @@ export const Calculator: React.FC = () => {
                   <input
                     type="number"
                     value={amount}
-                    onChange={e => updateAllocation(modelId, Number(e.target.value))}
+                    onChange={e => {
+                      const value = Number(e.target.value);
+                      updateAllocation(modelId, Number.isFinite(value) && value >= 0 ? value : 0);
+                    }}
                     className="operia-input w-24"
                     aria-label={`Cantidad para ${model?.displayName}`}
                     min="0"

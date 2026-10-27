@@ -9,10 +9,12 @@
     "priceOutputUsd": 0.5,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GLM-5.3 (Go)",
@@ -24,10 +26,12 @@
     "priceOutputUsd": 4.4,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GLM-5.2 (Go)",
@@ -39,10 +43,12 @@
     "priceOutputUsd": 4.4,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Kimi K3.1 Pro (Go)",
@@ -54,10 +60,12 @@
     "priceOutputUsd": 10,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Kimi K3 (Go)",
@@ -69,10 +77,12 @@
     "priceOutputUsd": 15,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Kimi K2.7 Code (Go)",
@@ -84,10 +94,12 @@
     "priceOutputUsd": 4,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "LongCat-2.0 (Go)",
@@ -99,10 +111,12 @@
     "priceOutputUsd": 1.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Step 5 Preview (Go)",
@@ -114,10 +128,12 @@
     "priceOutputUsd": 2.7,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Beam Free (Go)",
@@ -129,10 +145,12 @@
     "priceOutputUsd": 0,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.724Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "unlimited",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiMo-V2.6-Flash (Go)",
@@ -144,10 +162,12 @@
     "priceOutputUsd": 0.28,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiMo-V2.6-Pro (Go)",
@@ -159,10 +179,12 @@
     "priceOutputUsd": 0.87,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiMo-V2.5 (Go)",
@@ -174,10 +196,12 @@
     "priceOutputUsd": 0.28,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiMo-V2.5-Pro (Go)",
@@ -189,10 +213,12 @@
     "priceOutputUsd": 0.87,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiniMax M3.1 Flash (Go)",
@@ -204,10 +230,12 @@
     "priceOutputUsd": 0.6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiniMax M3 (Go)",
@@ -219,10 +247,12 @@
     "priceOutputUsd": 1.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Muse Spark 1.3 Contributor (Go)",
@@ -234,10 +264,12 @@
     "priceOutputUsd": 0.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Muse Spark 1.2 Contributor (Go)",
@@ -249,10 +281,12 @@
     "priceOutputUsd": 0.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Qwen3.8 Max (Go)",
@@ -264,10 +298,12 @@
     "priceOutputUsd": 6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Qwen3.8 Flash (Go)",
@@ -279,10 +315,12 @@
     "priceOutputUsd": 0.47,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.725Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Qwen3.7 Plus (≤ 256K tokens) (Go)",
@@ -294,10 +332,12 @@
     "priceOutputUsd": 1.6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.726Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Qwen3.7 Plus (> 256K tokens) (Go)",
@@ -309,10 +349,12 @@
     "priceOutputUsd": 4.8,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.726Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "DeepSeek V4.1 Flash (Off-Peak) (Go)",
@@ -324,10 +366,12 @@
     "priceOutputUsd": 0.6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "DeepSeek V4.1 Flash (Peak) (Go)",
@@ -339,10 +383,12 @@
     "priceOutputUsd": 1.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "DeepSeek V4 Pro (Off-Peak) (Go)",
@@ -354,10 +400,12 @@
     "priceOutputUsd": 1.98,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "DeepSeek V4 Pro (Peak) (Go)",
@@ -369,10 +417,12 @@
     "priceOutputUsd": 3.96,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Hy4 preview (Go)",
@@ -384,10 +434,12 @@
     "priceOutputUsd": 2.501,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Hy3 (Go)",
@@ -399,10 +451,12 @@
     "priceOutputUsd": 0.58,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Grok 4.7 (≤ 200K tokens) (Go)",
@@ -414,10 +468,12 @@
     "priceOutputUsd": 6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Grok 4.7 (> 200K tokens) (Go)",
@@ -429,10 +485,12 @@
     "priceOutputUsd": 12,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GPT 6 Luna (≤ 272K tokens) (Go)",
@@ -444,10 +502,12 @@
     "priceOutputUsd": 0.5,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GPT 6 Luna (> 272K tokens) (Go)",
@@ -459,10 +519,12 @@
     "priceOutputUsd": 0.75,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GPT 5.6 Luna (≤ 272K tokens) (Go)",
@@ -474,10 +536,12 @@
     "priceOutputUsd": 1.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GPT 5.6 Luna (> 272K tokens) (Go)",
@@ -489,10 +553,12 @@
     "priceOutputUsd": 1.8,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.727Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Claude Haiku 5.5 (≤ 100K tokens) (Go)",
@@ -504,10 +570,12 @@
     "priceOutputUsd": 0.5,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Claude Haiku 5.5 (> 100K tokens) (Go)",
@@ -519,10 +587,12 @@
     "priceOutputUsd": 2.5,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Gemini 4 Argon (50% off) (Go)",
@@ -534,10 +604,12 @@
     "priceOutputUsd": 10,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GLM-5.3-Flash (Go Plus)",
@@ -549,10 +621,12 @@
     "priceOutputUsd": 0.5,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GLM-5.3 (Go Plus)",
@@ -564,10 +638,12 @@
     "priceOutputUsd": 4.4,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GLM-5.2 (Go Plus)",
@@ -579,10 +655,12 @@
     "priceOutputUsd": 4.4,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Kimi K3.1 Pro (Go Plus)",
@@ -594,10 +672,12 @@
     "priceOutputUsd": 10,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Kimi K3 (Go Plus)",
@@ -609,10 +689,12 @@
     "priceOutputUsd": 15,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Kimi K2.7 Code (Go Plus)",
@@ -624,10 +706,12 @@
     "priceOutputUsd": 4,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.728Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "LongCat-2.0 (Go Plus)",
@@ -639,10 +723,12 @@
     "priceOutputUsd": 1.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Step 5 Preview (Go Plus)",
@@ -654,10 +740,12 @@
     "priceOutputUsd": 2.7,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Beam Free (Go Plus)",
@@ -669,10 +757,12 @@
     "priceOutputUsd": 0,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "unlimited",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiMo-V2.6-Flash (Go Plus)",
@@ -684,10 +774,12 @@
     "priceOutputUsd": 0.28,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiMo-V2.6-Pro (Go Plus)",
@@ -699,10 +791,12 @@
     "priceOutputUsd": 0.87,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiMo-V2.5 (Go Plus)",
@@ -714,10 +808,12 @@
     "priceOutputUsd": 0.28,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiMo-V2.5-Pro (Go Plus)",
@@ -729,10 +825,12 @@
     "priceOutputUsd": 0.87,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiniMax M3.1 Flash (Go Plus)",
@@ -744,10 +842,12 @@
     "priceOutputUsd": 0.6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "MiniMax M3 (Go Plus)",
@@ -759,10 +859,12 @@
     "priceOutputUsd": 1.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Muse Spark 1.3 Contributor (Go Plus)",
@@ -774,10 +876,12 @@
     "priceOutputUsd": 0.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Muse Spark 1.2 Contributor (Go Plus)",
@@ -789,10 +893,12 @@
     "priceOutputUsd": 0.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Qwen3.8 Max (Go Plus)",
@@ -804,10 +910,12 @@
     "priceOutputUsd": 6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Qwen3.8 Flash (Go Plus)",
@@ -819,10 +927,12 @@
     "priceOutputUsd": 0.47,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Qwen3.7 Plus (≤ 256K tokens) (Go Plus)",
@@ -834,10 +944,12 @@
     "priceOutputUsd": 1.6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.729Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Qwen3.7 Plus (> 256K tokens) (Go Plus)",
@@ -849,10 +961,12 @@
     "priceOutputUsd": 4.8,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "DeepSeek V4.1 Flash (Off-Peak) (Go Plus)",
@@ -864,10 +978,12 @@
     "priceOutputUsd": 0.6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "DeepSeek V4.1 Flash (Peak) (Go Plus)",
@@ -879,10 +995,12 @@
     "priceOutputUsd": 1.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "DeepSeek V4 Pro (Off-Peak) (Go Plus)",
@@ -894,10 +1012,12 @@
     "priceOutputUsd": 1.98,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "DeepSeek V4 Pro (Peak) (Go Plus)",
@@ -909,10 +1029,12 @@
     "priceOutputUsd": 3.96,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Hy4 preview (Go Plus)",
@@ -924,10 +1046,12 @@
     "priceOutputUsd": 2.501,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Hy3 (Go Plus)",
@@ -939,10 +1063,12 @@
     "priceOutputUsd": 0.58,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Grok 4.7 (≤ 200K tokens) (Go Plus)",
@@ -954,10 +1080,12 @@
     "priceOutputUsd": 6,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Grok 4.7 (> 200K tokens) (Go Plus)",
@@ -969,10 +1097,12 @@
     "priceOutputUsd": 12,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GPT 6 Luna (≤ 272K tokens) (Go Plus)",
@@ -984,10 +1114,12 @@
     "priceOutputUsd": 0.5,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GPT 6 Luna (> 272K tokens) (Go Plus)",
@@ -999,10 +1131,12 @@
     "priceOutputUsd": 0.75,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GPT 5.6 Luna (≤ 272K tokens) (Go Plus)",
@@ -1014,10 +1148,12 @@
     "priceOutputUsd": 1.2,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.730Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "GPT 5.6 Luna (> 272K tokens) (Go Plus)",
@@ -1029,10 +1165,12 @@
     "priceOutputUsd": 1.8,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.731Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Claude Haiku 5.5 (≤ 100K tokens) (Go Plus)",
@@ -1044,10 +1182,12 @@
     "priceOutputUsd": 0.5,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.731Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Claude Haiku 5.5 (> 100K tokens) (Go Plus)",
@@ -1059,10 +1199,12 @@
     "priceOutputUsd": 2.5,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.731Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   },
   {
     "id": "Gemini 4 Argon (50% off) (Go Plus)",
@@ -1074,9 +1216,11 @@
     "priceOutputUsd": 10,
     "sourceUrl": "https://opencode.ai/v2/docs/console/go/",
     "checkedAt": "2026-10-26T12:34:38.731Z",
-    "sourceType": "official_verified",
-    "confidence": "high",
+    "sourceType": "official_document",
+    "confidence": "medium",
     "notes": "Go Plus plan",
-    "active": true
+    "active": true,
+    "limitStatus": "known",
+    "verification": "auto_extracted"
   }
 ]

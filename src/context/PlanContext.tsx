@@ -1,7 +1,8 @@
-// src/context/PlanContext.tsx
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export type Plan = 'go' | 'go-plus';
+
+const PLAN_STORAGE_KEY = 'operia.planner.plan.v1';
 
 interface PlanContextValue {
   plan: Plan;
@@ -12,8 +13,26 @@ interface PlanContextValue {
 
 const PlanContext = createContext<PlanContextValue | undefined>(undefined);
 
+function readStoredPlan(): Plan {
+  if (typeof window === 'undefined') return 'go';
+  try {
+    const value = window.localStorage.getItem(PLAN_STORAGE_KEY);
+    return value === 'go-plus' ? 'go-plus' : 'go';
+  } catch {
+    return 'go';
+  }
+}
+
 export const PlanProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [plan, setPlan] = useState<Plan>('go');
+  const [plan, setPlan] = useState<Plan>(readStoredPlan);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(PLAN_STORAGE_KEY, plan);
+    } catch {
+      // El plan sigue funcionando en memoria si localStorage no está disponible.
+    }
+  }, [plan]);
 
   const planName = plan === 'go' ? 'OpenCode Go' : 'OpenCode Go Plus';
   const planLimit = plan === 'go' ? '$10/mes' : '$40/mes';

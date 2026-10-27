@@ -1,10 +1,16 @@
 // src/ui/components/ToolsPanel.tsx
 import React, { useState } from 'react';
 import { useCatalog } from '../../context/CatalogContext';
+import { getLimitStatus, getVerificationStatus } from '../../domain/models';
 
 export const ToolsPanel: React.FC = () => {
   const { catalog, lastUpdated } = useCatalog();
   const [copied, setCopied] = useState(false);
+
+  const autoExtracted = catalog.filter(m => getVerificationStatus(m) === 'auto_extracted').length;
+  const manuallyVerified = catalog.filter(m => getVerificationStatus(m) === 'manually_verified').length;
+  const unknownLimits = catalog.filter(m => getLimitStatus(m) === 'unknown').length;
+  const unlimitedLimits = catalog.filter(m => getLimitStatus(m) === 'unlimited').length;
 
   const actionCommand = 'npx tsx scripts/update-catalog.ts';
 
@@ -36,6 +42,25 @@ export const ToolsPanel: React.FC = () => {
         <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
           <span className="font-medium">Última actualización publicada:</span>
           <span className="text-white/60">{formattedLastUpdate}</span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+            <p className="text-[11px] uppercase tracking-wide text-white/40">Extraídos automáticamente</p>
+            <p className="mt-1 font-bold text-amber-300">{autoExtracted}</p>
+          </div>
+          <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+            <p className="text-[11px] uppercase tracking-wide text-white/40">Verificados manualmente</p>
+            <p className="mt-1 font-bold text-emerald-300">{manuallyVerified}</p>
+          </div>
+          <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+            <p className="text-[11px] uppercase tracking-wide text-white/40">Límite desconocido</p>
+            <p className="mt-1 font-bold text-white/80">{unknownLimits}</p>
+          </div>
+          <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+            <p className="text-[11px] uppercase tracking-wide text-white/40">Ilimitados</p>
+            <p className="mt-1 font-bold text-cyan-300">{unlimitedLimits}</p>
+          </div>
         </div>
 
         <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-300 text-xs">

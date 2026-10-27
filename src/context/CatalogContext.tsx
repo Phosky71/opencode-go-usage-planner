@@ -1,6 +1,7 @@
 // src/context/CatalogContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Model } from '../domain/models';
+import { CatalogSchema } from '../catalog/schema';
 import catalogData from '../data/models.json';
 
 interface CatalogContextValue {
@@ -21,7 +22,11 @@ export const CatalogProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // Initialize with static catalog data on mount
   useEffect(() => {
     try {
-      const data = catalogData as Model[];
+      const parsed = CatalogSchema.safeParse(catalogData);
+      if (!parsed.success) {
+        throw new Error(`Catálogo inválido: ${parsed.error.issues[0]?.message ?? 'error de validación'}`);
+      }
+      const data = parsed.data as Model[];
       setCatalog(data);
       if (data.length > 0) {
         const latest = data.reduce((max, m) => {

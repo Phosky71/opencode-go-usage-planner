@@ -1,5 +1,5 @@
 // src/catalog/parsers.ts
-import { Model } from '../domain/models';
+import { LimitStatus, Model } from '../domain/models';
 import { Source } from './source-registry';
 import { parse } from 'node-html-parser';
 
@@ -119,8 +119,7 @@ export function parseGoDocsDetailed(source: Source, html: string): ParseResult {
       const priceInputStr = idx.priceInput >= 0 ? getTextWithoutDel(cells[idx.priceInput]) : '';
       const priceOutputStr = idx.priceOutput >= 0 ? getTextWithoutDel(cells[idx.priceOutput]) : '';
 
-      const monthlyLimitUsd = parseMonthlyLimit(monthlyLimitStr);
-      const unlimited = monthlyLimitUsd === null;
+      const limit = parseMonthlyLimit(monthlyLimitStr);
       const priceInputUsd = parsePrice(priceInputStr);
       const priceOutputUsd = parsePrice(priceOutputStr);
 
@@ -130,14 +129,16 @@ export function parseGoDocsDetailed(source: Source, html: string): ParseResult {
         id,
         displayName: modelId,
         provider: 'OpenCode',
-        monthlyLimitUsd,
-        unlimited,
+        monthlyLimitUsd: limit.value,
+        limitStatus: limit.status,
+        unlimited: limit.status === 'unlimited',
         priceInputUsd,
         priceOutputUsd,
         sourceUrl: source.url,
         checkedAt: new Date().toISOString(),
-        sourceType: 'official_verified',
-        confidence: 'high',
+        sourceType: 'official_document',
+        verification: 'auto_extracted',
+        confidence: 'medium',
         notes: isGoPlus ? 'Go Plus plan' : 'Go plan',
         active: true,
       };
@@ -186,30 +187,46 @@ export function parseModelsApi(source: Source, json: string): Model[] {
     displayName: item.id.replace(/-/g, ' '),
     provider: 'OpenCode',
     monthlyLimitUsd: null,
-    unlimited: true,
+    limitStatus: 'unknown' as const,
+    unlimited: false,
     sourceUrl: source.url,
     checkedAt: now,
-    sourceType: 'official_verified' as const,
-    confidence: 'high' as const,
+    sourceType: 'official_document' as const,
+    verification: 'auto_extracted' as const,
+    confidence: 'low' as const,
   }));
 }
 
-function parseMonthlyLimit(value: string): number | null {
+function parseMonthlyLimit(value: string): { value: number | null; status: LimitStatus } {
   const trimmed = value.trim().toLowerCase();
-  if (trimmed.includes('unlimited')) return null;
-  if (trimmed === 'free' || trimmed === '-') return 0;
-  
+  if (trimmed.includes('unlimited') || trimmed.includes('ilimitado')) {
+    return { value: null, status: 'unlimited' };
+  }
+  if (trimmed === 'free' || trimmed === 'gratis') {
+    return { value: 0, status: 'known' };
+  }
+  if (!trimmed || trimmed === '-' || trimmed === '—' || trimmed === 'n/a' || trimmed === 'unknown' || trimmed === 'sin datos') {
+    return { value: null, status: 'unknown' };
+  }
+
   const withoutDel = value.replace(/<del>.*?<\/del>/gi, '').trim();
   const match = withoutDel.match(/\$?([\d,.]+)/);
-  if (!match) return 0;
-  return parseFloat(match[1].replace(/,/g, ''));
+  if (!match) return { value: null, status: 'unknown' };
+
+  const parsed = parseFloat(match[1].replace(/,/g, ''));
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return { value: null, status: 'unknown' };
+  }
+  return { value: parsed, status: 'known' };
 }
 
 function parsePrice(value: string): number | undefined {
   const trimmed = value.trim().toLowerCase();
-  if (trimmed === 'free' || trimmed === '-') return 0;
-  if (!trimmed) return undefined;
-  
+  if (trimmed === 'free' || trimmed === 'gratis') return 0;
+  if (!trimmed || trimmed === '-' || trimmed === '—' || trimmed === 'n/a' || trimmed === 'unknown') {
+    return undefined;
+  }
+
   const withoutDel = value.replace(/<del>.*?<\/del>/gi, '').trim();
   const match = withoutDel.match(/\$?([\d,.]+)/);
   if (!match) return undefined;

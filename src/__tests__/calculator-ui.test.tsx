@@ -1,61 +1,80 @@
 import React from 'react';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { Calculator } from '../ui/components/Calculator';
 import { CatalogProvider } from '../context/CatalogContext';
-import { Model } from '../domain/models';
+import { PlanProvider } from '../context/PlanContext';
+import { SCENARIO_STORAGE_KEY } from '../domain/scenario';
 
-// Mock a simple catalog for the test environment
-const mockCatalog: Model[] = [
-  {
-    id: 'glm-5.3',
-    displayName: 'GLM 5.3',
-    provider: 'OpenCode',
-    monthlyLimitUsd: 15,
-    priceInputUsd: 1.4,
-    priceOutputUsd: 4.4,
-    sourceUrl: 'https://example.com',
-    checkedAt: new Date().toISOString(),
-    sourceType: 'official_verified',
-    confidence: 'high',
-  },
-];
-
-jest.mock('../catalog/catalog', () => ({
-  loadCatalog: () => mockCatalog,
-  saveCatalog: jest.fn(),
-}));
-
-describe('Calculator UI integration', () => {
-  test('adds entry and calculates total correctly', async () => {
-    render(
+function renderCalculator() {
+  return render(
+    <PlanProvider>
       <CatalogProvider>
         <Calculator />
-      </CatalogProvider>,
-    );
-    // Wait for the catalog to load
-    await waitFor(() => screen.getByText('Calculadora de consumo'));
+      </CatalogProvider>
+    </PlanProvider>,
+  );
+}
 
-    // Select model
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'glm-5.3' } });
-    // Input consumption
-    fireEvent.change(screen.getByPlaceholderText('Consumo USD'), { target: { value: '7.5' } });
-    // Click add
-    fireEvent.click(screen.getByText('Añadir'));
+async function addFirstModelConsumption(amount = '7.5') {
+  const select = screen.getByLabelText('Seleccionar modelo') as HTMLSelectElement;
+  await waitFor(() => expect(select.options.length).toBeGreaterThan(1));
+  fireEvent.change(select, { target: { value: select.options[1].value } });
+  fireEvent.change(screen.getByLabelText('Consumo en USD'), { target: { value: amount } });
+  fireEvent.click(screen.getByRole('button', { name: /^Añadir$/ }));
+}
 
-    // Verify entry appears
-    expect(screen.getByText('GLM 5.3: $7.5')).toBeInTheDocument();
+describe('Calculator UI', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
 
-    // Set observed percent
-    fireEvent.change(screen.getByLabelText('Porcentaje observado (desde consola):'), {
-      target: { value: '50' },
+  afterEach(() => {
+    cleanup();
+  });
+
+  test('adds consumption and calculates the shared quota', async () => {
+    renderCalculator();
+    await screen.findByText('Calculadora de consumo');
+    await addFirstModelConsumption();
+    const list = screen.getByText('Consumos registrados').parentElement!;
+    expect(list).toHaveTextContent('GLM-5.3-Flash');
+    expect(list).toHaveTextContent('$7.5');
+
+    fireEvent.click(screen.getByRole('button', { name: /^Calcular$/ }));
+    expect(await screen.findByText(/Consumo estimado de cuota compartida/)).toBeInTheDocument();
+    expect(screen.getAllByText(/12.50/).length).toBeGreaterThan(0);
+  });
+
+  test('restores the scenario from localStorage after remounting', async () => {
+    const first = renderCalculator();
+    await screen.findByText('Calculadora de consumo');
+    await addFirstModelConsumption();
+
+    await waitFor(() => {
+      expect(window.localStorage.getItem(SCENARIO_STORAGE_KEY)).not.toBeNull();
     });
+    first.unmount();
 
-    // Click calculate
-    fireEvent.click(screen.getByText('Calcular'));
+    renderCalculator();
+    const list = (await screen.findByText('Consumos registrados')).parentElement!;
+    expect(list).toHaveTextContent('GLM-5.3-Flash');
+    expect(list).toHaveTextContent('$7.5');
+  });
 
-    // Verify result
-    await waitFor(() => screen.getByText(/Total estimado:/));
-    expect(screen.getByText('Total estimado: 50.00 %')).toBeInTheDocument();
-    expect(screen.getByText('Diferencia (puntos %): 0.00')).toBeInTheDocument();
+  test('warns when allocations exceed the total budget without rewriting them', async () => {
+    renderCalculator();
+    await screen.findByText('Calculadora de consumo');
+
+    fireEvent.change(screen.getByLabelText('Presupuesto total en USD'), { target: { value: '10' } });
+    const budgetSelect = screen.getByLabelText('Añadir modelo al presupuesto') as HTMLSelectElement;
+    await waitFor(() => expect(budgetSelect.options.length).toBeGreaterThan(1));
+    fireEvent.change(budgetSelect, { target: { value: budgetSelect.options[1].value } });
+
+    const allocation = await screen.findByLabelText(/Cantidad para/);
+    fireEvent.change(allocation, { target: { value: '15' } });
+
+    expect(await screen.findByText(/Has asignado \$5.00 más/)).toBeInTheDocument();
+    expect(allocation).toHaveValue(15);
   });
 });

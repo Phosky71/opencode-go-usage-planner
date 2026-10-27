@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useCatalog } from '../../context/CatalogContext';
 import { usePlan } from '../../context/PlanContext';
-import { Model } from '../../domain/models';
+import { formatMonthlyLimit, Model } from '../../domain/models';
 import { contributionPerDollar } from '../../domain/calculations';
 
 type SortKey = 'name' | 'limit' | 'input' | 'output' | 'contribPerDollar';
@@ -102,7 +102,7 @@ export const ModelComparator: React.FC = () => {
               return (
                 <tr key={m.id}>
                   <td data-label="Modelo">{m.displayName} {m.unlimited && <span className="text-amber-400 text-xs">(Ilimitado)</span>}</td>
-                  <td data-label="Límite mensual">{m.unlimited ? 'Ilimitado' : `$${m.monthlyLimitUsd}`}</td>
+                  <td data-label="Límite mensual">{formatMonthlyLimit(m)}</td>
                   <td data-label="Input $/1M">{m.priceInputUsd ?? '-'}</td>
                   <td data-label="Output $/1M">{m.priceOutputUsd ?? '-'}</td>
                   <td data-label="Contrib. por $">

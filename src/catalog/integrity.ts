@@ -3,7 +3,6 @@
 // Ensures that partial or corrupt extractions don't overwrite valid catalogs.
 
 import { Model } from '../domain/models';
-import { z } from 'zod';
 import { CatalogSchema } from './schema';
 
 export interface IntegrityCheckResult {
@@ -17,6 +16,8 @@ export interface IntegrityCheckResult {
     uniqueIds: number;
     duplicateIds: string[];
     modelsWithNullLimit: number;
+    modelsWithUnknownLimit: number;
+    modelsWithUnlimitedLimit: number;
     modelsWithZeroLimit: number;
     modelsWithMissingPrice: number;
     detectedRows?: number;
@@ -90,20 +91,22 @@ export function validateIntegrity(
     }
   }
 
-  // Check for models with null limit but unlimited=false
-  const inconsistentUnlimited = models.filter(
-    m => m.monthlyLimitUsd === null && m.unlimited !== true
-  );
-  if (inconsistentUnlimited.length > 0) {
-    errors.push(`Models with null limit but unlimited≠true: ${inconsistentUnlimited.map(m => m.id).join(', ')}`);
-  }
-
-  // Check for models with number limit but unlimited=true
-  const inconsistentLimited = models.filter(
-    m => m.monthlyLimitUsd !== null && m.unlimited === true
-  );
-  if (inconsistentLimited.length > 0) {
-    errors.push(`Models with number limit but unlimited=true: ${inconsistentLimited.map(m => m.id).join(', ')}`);
+  // Validate the explicit semantics of the monthly limit.
+  const inconsistentLimits = models.filter((m) => {
+    if (m.limitStatus === 'unknown') {
+      return m.monthlyLimitUsd !== null || m.unlimited === true;
+    }
+    if (m.limitStatus === 'unlimited') {
+      return m.monthlyLimitUsd !== null || m.unlimited !== true;
+    }
+    if (m.limitStatus === 'known') {
+      return typeof m.monthlyLimitUsd !== 'number' || m.monthlyLimitUsd < 0 || m.unlimited === true;
+    }
+    // Legacy records without limitStatus keep the previous validation rules.
+    return m.monthlyLimitUsd === null ? m.unlimited !== true : m.unlimited === true;
+  });
+  if (inconsistentLimits.length > 0) {
+    errors.push(`Inconsistent monthly limit semantics: ${inconsistentLimits.map(m => m.id).join(', ')}`);
   }
 
   // Check row-level metrics if available
@@ -122,6 +125,8 @@ export function validateIntegrity(
 
   // Warnings for potentially incomplete data
   const modelsWithNullLimit = models.filter(m => m.monthlyLimitUsd === null).length;
+  const modelsWithUnknownLimit = models.filter(m => m.limitStatus === 'unknown').length;
+  const modelsWithUnlimitedLimit = models.filter(m => m.limitStatus === 'unlimited').length;
   const modelsWithZeroLimit = models.filter(m => m.monthlyLimitUsd === 0).length;
   const modelsWithMissingPrice = models.filter(
     m => m.priceInputUsd === undefined || m.priceOutputUsd === undefined
@@ -138,6 +143,8 @@ export function validateIntegrity(
     uniqueIds: uniqueIds.size,
     duplicateIds: [...new Set(duplicateIds)],
     modelsWithNullLimit,
+    modelsWithUnknownLimit,
+    modelsWithUnlimitedLimit,
     modelsWithZeroLimit,
     modelsWithMissingPrice,
     detectedRows: metrics?.detectedModelRows,

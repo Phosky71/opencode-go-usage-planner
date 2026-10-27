@@ -1,5 +1,6 @@
 // src/domain/calculations.ts
 import type { Model, ConsumptionEntry, Contribution } from './models';
+import { getLimitStatus } from './models';
 import { isFinitePositive } from './validation';
 
 /**
@@ -13,12 +14,15 @@ export function computeContribution(
   entry: ConsumptionEntry,
 ): Contribution | null {
   if (model.id !== entry.modelId) return null;
-  
+
+  const limitStatus = getLimitStatus(model);
+  if (limitStatus === 'unknown') return null;
+
   // Unlimited models don't have a defined contribution percentage
-  if (model.monthlyLimitUsd === null || model.unlimited) {
+  if (limitStatus === 'unlimited') {
     return { modelId: model.id, contributionPercent: null };
   }
-  
+
   const L = model.monthlyLimitUsd;
   const C = entry.consumptionUsd;
   
@@ -59,7 +63,7 @@ export function computeDifference(estimatedTotal: number, observed: number): num
  * Compute contribution per dollar: how much quota % each dollar of consumption adds
  */
 export function contributionPerDollar(model: Model): number | null {
-  if (model.monthlyLimitUsd === null || model.unlimited || model.monthlyLimitUsd === 0) {
+  if (getLimitStatus(model) !== 'known' || model.monthlyLimitUsd === null || model.monthlyLimitUsd === 0) {
     return null;
   }
   return 100 / model.monthlyLimitUsd;
@@ -69,7 +73,7 @@ export function contributionPerDollar(model: Model): number | null {
  * Compute hypothetical contribution for a budget amount on a model
  */
 export function hypotheticalContribution(model: Model, amountUsd: number): number | null {
-  if (model.monthlyLimitUsd === null || model.unlimited || model.monthlyLimitUsd === 0) {
+  if (getLimitStatus(model) !== 'known' || model.monthlyLimitUsd === null || model.monthlyLimitUsd === 0) {
     return null;
   }
   if (amountUsd < 0 || !Number.isFinite(amountUsd)) return null;
