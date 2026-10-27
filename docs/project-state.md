@@ -28,8 +28,8 @@
 
 ## Recent Changes
 - Initial implementation complete
-- 72 models in catalog (36 Go + 36 Go Plus)
-- 74 automated tests passing (domain, parser, integrity, scenario, UI)
+- 74 models in catalog (37 Go + 37 Go Plus)
+- 80 automated tests passing (domain, parser, integrity, scenario, audit, UI)
 - Typecheck and build passing
 - UI redesigned with Operia Systems identity
 - Plan selector implemented (Go / Go Plus)
@@ -43,22 +43,23 @@
 - Added active UI tests
 
 ## Active Work
-- None. Ready for review and deployment.
+- None. Ready for review; deployment is pending explicit authorization.
 
 ## Pending Work
 - GitHub Actions workflow needs to be tested on a remote repository
-- Manual verification of all 72 records against official source
+- Manual verification of all 74 records against official source
 - Public repository and public deployment are still pending
 - Catalog parser could be extended to record more provenance fields per column
 - No scenario history or versioned snapshots yet
+- Run `npm run verify:catalog` before publishing a catalog update (read-only diff against the official source)
 
 ## Known Issues
 - Workflow not executed on GitHub (no remote repository configured)
 - Parser depends on official documentation structure
 - Budget planner warns about excess but does not enforce a sum
 - Manual verification remains pending for all records
-- Lint passes with 53 pre-existing warnings
-- Bundle is ~263 KB uncompressed / ~70 KB gzip after adding validated persistence
+- Lint passes with 33 pre-existing warnings
+- Bundle is ~265 KB uncompressed / ~70 KB gzip after the catalog and persistence additions
 
 ## Next Steps
 1. Create and review a public repository if authorized

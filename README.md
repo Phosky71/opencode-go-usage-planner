@@ -4,7 +4,7 @@ Aplicación web open source para calcular, comparar y simular el consumo de las 
 
 ## Características
 
-- **Catálogo de 72 modelos** (36 Go + 36 Go Plus) con límites y precios oficiales
+- **Catálogo de 74 modelos** (37 Go + 37 Go Plus) con límites y precios oficiales
 - **Calculadora de consumo** con fórmula `P_i = 100 × consumo / límite_mensual`
 - **Selector de plan** (OpenCode Go / Go Plus) con filtrado automático
 - **Simulador de escenarios** con gastos hipotéticos
@@ -16,7 +16,7 @@ Aplicación web open source para calcular, comparar y simular el consumo de las 
 - **Actualización automática** vía GitHub Actions (CLI/CI, no desde el navegador)
 - **Persistencia local versionada** de escenarios y preferencias
 - **Importación/exportación JSON** validada con Zod
-- **74 tests automatizados**
+- **80 tests automatizados**
 
 ## Integración en Operia Systems
 
@@ -32,7 +32,7 @@ El catálogo se extrae de documentación pública de OpenCode. Los registros se 
 - `verification: "auto_extracted"`: el dato fue extraído automáticamente y **no** passó por revisión manual;
 - `limitStatus: "known" | "unlimited" | "unknown"`: distingue un límite numérico, un límite ilimitado y un dato no interpretable.
 
-La interfaz muestra estos estados de forma explícita. Un valor desconocido no se convierte en cero ni se presenta como gratuito. La verificación manual de los 72 registros sigue pendiente.
+La interfaz muestra estos estados de forma explícita. Un valor desconocido no se convierte en cero ni se presenta como gratuito. La verificación manual de los 74 registros sigue pendiente.
 
 ## Persistencia, importación y exportación
 
@@ -51,7 +51,7 @@ El formato de exportación es JSON, versión 1, con límite de 256 KB y máximo 
 - La persistencia es local al navegador; no se sincroniza entre dispositivos.
 - El planificador de presupuesto avisa del exceso, pero no recorta ni redistribuye asignaciones.
 - El catálogo requiere revisión manual; el workflow de GitHub Actions no se ha probado en remoto.
-- El bundle actual ronda los 263 KB sin comprimir / 70 KB gzip.
+- El bundle actual ronda los 265 KB sin comprimir / 70 KB gzip.
 
 ## Comandos
 
