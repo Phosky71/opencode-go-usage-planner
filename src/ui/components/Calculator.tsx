@@ -173,8 +173,8 @@ export const Calculator: React.FC = () => {
       <div className="mb-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-white/50">Escenario local</p>
-            <p className="mt-1 text-xs text-white/50">
+            <p className="text-xs font-semibold uppercase tracking-wide text-white/60">Escenario local</p>
+            <p className="mt-1 text-xs text-white/60">
               Se guarda automáticamente en este navegador. No se envía a ningún servidor.
             </p>
           </div>
@@ -249,7 +249,7 @@ export const Calculator: React.FC = () => {
                   <span className="text-sm text-white/90">
                     {model?.displayName}: <strong className="text-cyan-400">${e.consumptionUsd}</strong>
                     {contrib?.contributionPercent !== null && contrib?.contributionPercent !== undefined && (
-                      <span className="text-white/50 ml-2">→ {contrib.contributionPercent.toFixed(2)}%</span>
+                      <span className="text-white/60 ml-2">→ {contrib.contributionPercent.toFixed(2)}%</span>
                     )}
                     {model && getLimitStatus(model) === 'unlimited' && <span className="text-amber-400 ml-2">(Ilimitado)</span>}
                     {model && getLimitStatus(model) === 'unknown' && <span className="text-amber-400 ml-2">(Límite desconocido)</span>}
@@ -326,7 +326,7 @@ export const Calculator: React.FC = () => {
               </p>
             </>
           )}
-          <p className="text-xs text-white/40 mt-2">
+          <p className="text-xs text-white/60 mt-2">
             Fórmula: U = Σ(Cᵢ / Lᵢ) × 100. El consumo real puede diferir por redondeos,
             actividad no registrada o limitaciones del modelo de estimación.
           </p>
@@ -380,7 +380,7 @@ export const Calculator: React.FC = () => {
                   <li key={i} className="flex items-center justify-between bg-white/5 rounded-lg p-3 border border-white/5">
                     <span className="text-sm text-white/90">
                       {model?.displayName}: <strong className="text-cyan-400">${h.amountUsd}</strong>
-                      {contrib !== null && <span className="text-white/50 ml-2">→ +{contrib.toFixed(2)}%</span>}
+                      {contrib !== null && <span className="text-white/60 ml-2">→ +{contrib.toFixed(2)}%</span>}
                       {model && getLimitStatus(model) === 'unlimited' && <span className="text-amber-400 ml-2">(Ilimitado)</span>}
                       {model && getLimitStatus(model) === 'unknown' && <span className="text-amber-400 ml-2">(Límite desconocido)</span>}
                     </span>
@@ -441,19 +441,19 @@ export const Calculator: React.FC = () => {
         {(budgetNum > 0 || assignedBudget > 0) && (
           <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
             <div className="rounded-lg border border-white/5 bg-white/5 p-2.5">
-              <p className="text-[10px] uppercase tracking-wide text-white/40">Presupuesto</p>
+              <p className="text-[10px] uppercase tracking-wide text-white/60">Presupuesto</p>
               <p className="text-sm font-semibold text-white">${budgetNum.toFixed(2)}</p>
             </div>
             <div className="rounded-lg border border-white/5 bg-white/5 p-2.5">
-              <p className="text-[10px] uppercase tracking-wide text-white/40">Asignado</p>
+              <p className="text-[10px] uppercase tracking-wide text-white/60">Asignado</p>
               <p className="text-sm font-semibold text-cyan-300">${assignedBudget.toFixed(2)}</p>
             </div>
             <div className="rounded-lg border border-white/5 bg-white/5 p-2.5">
-              <p className="text-[10px] uppercase tracking-wide text-white/40">No asignado</p>
+              <p className="text-[10px] uppercase tracking-wide text-white/60">No asignado</p>
               <p className="text-sm font-semibold text-white/80">${unassignedBudget.toFixed(2)}</p>
             </div>
             <div className={`rounded-lg border p-2.5 ${budgetExcess > 0 ? 'border-red-500/30 bg-red-500/10' : 'border-white/5 bg-white/5'}`}>
-              <p className="text-[10px] uppercase tracking-wide text-white/40">Exceso</p>
+              <p className="text-[10px] uppercase tracking-wide text-white/60">Exceso</p>
               <p className={`text-sm font-semibold ${budgetExcess > 0 ? 'text-red-300' : 'text-white/80'}`}>
                 ${budgetExcess.toFixed(2)}
               </p>
@@ -510,7 +510,7 @@ export const Calculator: React.FC = () => {
                     min="0"
                     step="0.01"
                   />
-                  <span className="text-xs text-white/50 w-16 text-right">
+                  <span className="text-xs text-white/60 w-16 text-right">
                     {contrib !== null ? `+${contrib.toFixed(2)}%` : 'N/A'}
                   </span>
                   <button

@@ -46,19 +46,19 @@ export const ToolsPanel: React.FC = () => {
 
         <div className="grid grid-cols-2 gap-2">
           <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-            <p className="text-[11px] uppercase tracking-wide text-white/40">Extraídos automáticamente</p>
+            <p className="text-[11px] uppercase tracking-wide text-white/60">Extraídos automáticamente</p>
             <p className="mt-1 font-bold text-amber-300">{autoExtracted}</p>
           </div>
           <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-            <p className="text-[11px] uppercase tracking-wide text-white/40">Verificados manualmente</p>
+            <p className="text-[11px] uppercase tracking-wide text-white/60">Verificados manualmente</p>
             <p className="mt-1 font-bold text-emerald-300">{manuallyVerified}</p>
           </div>
           <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-            <p className="text-[11px] uppercase tracking-wide text-white/40">Límite desconocido</p>
+            <p className="text-[11px] uppercase tracking-wide text-white/60">Límite desconocido</p>
             <p className="mt-1 font-bold text-white/80">{unknownLimits}</p>
           </div>
           <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-            <p className="text-[11px] uppercase tracking-wide text-white/40">Ilimitados</p>
+            <p className="text-[11px] uppercase tracking-wide text-white/60">Ilimitados</p>
             <p className="mt-1 font-bold text-cyan-300">{unlimitedLimits}</p>
           </div>
         </div>

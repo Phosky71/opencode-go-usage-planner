@@ -119,7 +119,7 @@ export const ModelComparator: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-white/40 mt-3">
+      <p className="text-xs text-white/60 mt-3">
         «Contrib. por $» indica cuántos puntos porcentuales de cuota se consumen por cada dólar de gasto.
         Menor valor = menor impacto en la cuota por dólar gastado. Esto no implica que el modelo sea
         mejor para todas las tareas: la adecuación técnica depende del caso de uso.

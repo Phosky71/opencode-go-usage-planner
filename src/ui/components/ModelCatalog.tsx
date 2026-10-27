@@ -77,7 +77,7 @@ export const ModelCatalog: React.FC = () => {
                         >
                           {SOURCE_LABELS[m.sourceType]}
                         </a>
-                        <span className="text-[10px] text-white/35">
+                        <span className="text-[10px] text-white/55">
                           {new Date(m.checkedAt).toLocaleDateString('es-ES')}
                         </span>
                       </div>

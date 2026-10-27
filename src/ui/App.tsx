@@ -96,10 +96,10 @@ export default function App() {
                 </svg>
                 <span className="text-sm font-bold tracking-wide text-white/80" style={{ fontFamily: 'var(--font-display, system-ui)' }}>Operia Systems</span>
               </div>
-              <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-white/40">
+              <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-white/60">
                 <span>OpenCode Go Usage Planner · Herramienta independiente</span>
               </nav>
-              <p className="text-xs font-medium text-white/30 tracking-wide">© 2026 Operia Systems</p>
+              <p className="text-xs font-medium text-white/55 tracking-wide">© 2026 Operia Systems</p>
             </div>
           </footer>
         </div>
