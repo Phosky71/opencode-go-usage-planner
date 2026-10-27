@@ -1,12 +1,31 @@
 import js from '@eslint/js';
-import typescript from '@typescript-eslint/eslint-plugin';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
+  {
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'coverage/**',
+      'vite.config.js',
+      'vite.config.d.ts',
+      'vitest.config.js',
+      'vitest.config.d.ts',
+      'postcss.config.cjs',
+      '.eslintrc.cjs',
+    ],
+  },
   js.configs.recommended,
-  ...typescript.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
     rules: {
       'no-console': 'warn',
       'no-unused-vars': 'warn',
