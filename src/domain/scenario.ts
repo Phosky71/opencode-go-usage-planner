@@ -44,6 +44,17 @@ export const ScenarioSchema = z.object({
 export type Scenario = z.infer<typeof ScenarioSchema>;
 export type ScenarioHypothesis = z.infer<typeof hypothesisSchema>;
 
+export function normalizeNumericText(value: string): string {
+  return /^\d*(?:[.,]\d*)?$/.test(value) ? value : '';
+}
+
+export function numericTextToNumber(value: string): number | null {
+  const normalized = normalizeNumericText(value).replace(',', '.');
+  if (!normalized.trim()) return null;
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 export function createEmptyScenario(plan: Scenario['plan'] = 'go'): Scenario {
   return {
     version: SCENARIO_VERSION,

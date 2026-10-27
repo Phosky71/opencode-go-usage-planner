@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import { useCatalog } from '../../context/CatalogContext';
 import { usePlan } from '../../context/PlanContext';
 import { Model, formatMonthlyLimit, getLimitStatus } from '../../domain/models';
+import { numericTextToNumber } from '../../domain/scenario';
 import {
   computeContribution,
   totalContribution,
@@ -87,7 +88,8 @@ export const Calculator: React.FC = () => {
       })
       .filter((c): c is NonNullable<typeof c> => c !== null);
     const total = totalContribution(contributions);
-    const diff = observed ? computeDifference(total, Number(observed)) : 0;
+    const observedValue = numericTextToNumber(observed);
+    const diff = observedValue !== null ? computeDifference(total, observedValue) : 0;
     const hasUnlimited = entries.some(e => {
       const model = catalog.find(m => m.id === e.modelId);
       return model ? getLimitStatus(model) === 'unlimited' : false;
@@ -124,7 +126,7 @@ export const Calculator: React.FC = () => {
   const combinedRemaining = 100 - combinedTotal;
 
   // Budget planner
-  const budgetNum = Math.max(0, Number(budget) || 0);
+  const budgetNum = Math.max(0, numericTextToNumber(budget) ?? 0);
   const budgetModels = Object.keys(budgetAllocations);
   const budgetContributions = budgetModels.map(modelId => {
     const model = catalog.find(m => m.id === modelId);
@@ -319,7 +321,7 @@ export const Calculator: React.FC = () => {
           {observed && (
             <>
               <p className="text-sm text-white/60">
-                Porcentaje observado en consola: {Number(observed).toFixed(2)} %
+                Porcentaje observado en consola: {(numericTextToNumber(observed) ?? 0).toFixed(2)} %
               </p>
               <p className="text-sm text-white/60">
                 Diferencia (puntos %): {result.diff.toFixed(2)}

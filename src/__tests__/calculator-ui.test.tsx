@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { Calculator } from '../ui/components/Calculator';
 import { CatalogProvider } from '../context/CatalogContext';
-import { PlanProvider } from '../context/PlanContext';
+import { PLAN_STORAGE_KEY, PlanProvider } from '../context/PlanContext';
 import { SCENARIO_STORAGE_KEY } from '../domain/scenario';
 
 function renderCalculator() {
@@ -76,5 +76,25 @@ describe('Calculator UI', () => {
 
     expect(await screen.findByText(/Has asignado \$5.00 más/)).toBeInTheDocument();
     expect(allocation).toHaveValue(15);
+  });
+
+  test('clears both the saved scenario and the plan preference', async () => {
+    window.localStorage.setItem(PLAN_STORAGE_KEY, 'go-plus');
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+    renderCalculator();
+    await screen.findByText('Calculadora de consumo');
+    await addFirstModelConsumption();
+    await waitFor(() => {
+      expect(window.localStorage.getItem(SCENARIO_STORAGE_KEY)).not.toBeNull();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /^Borrar datos$/ }));
+    await new Promise((resolve) => window.setTimeout(resolve, 350));
+
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(window.localStorage.getItem(SCENARIO_STORAGE_KEY)).toBeNull();
+    expect(window.localStorage.getItem(PLAN_STORAGE_KEY)).toBeNull();
+    expect(screen.queryByText('Consumos registrados')).not.toBeInTheDocument();
+    confirmSpy.mockRestore();
   });
 });

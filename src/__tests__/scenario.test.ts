@@ -3,6 +3,8 @@ import {
   MAX_SCENARIO_BYTES,
   Scenario,
   ScenarioSchema,
+  normalizeNumericText,
+  numericTextToNumber,
   parseScenarioJson,
   serializeScenario,
   unknownScenarioModelIds,
@@ -57,5 +59,14 @@ describe('scenario schema', () => {
 
   test('documents a bounded import size', () => {
     expect(MAX_SCENARIO_BYTES).toBe(256 * 1024);
+  });
+
+  test('normalizes numeric text and rejects malformed values', () => {
+    expect(normalizeNumericText('12.5')).toBe('12.5');
+    expect(normalizeNumericText('12,5')).toBe('12,5');
+    expect(normalizeNumericText('12abc')).toBe('');
+    expect(numericTextToNumber('12,5')).toBe(12.5);
+    expect(numericTextToNumber('')).toBeNull();
+    expect(numericTextToNumber('abc')).toBeNull();
   });
 });

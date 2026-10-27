@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { usePlan } from '../../context/PlanContext';
 import { Model } from '../../domain/models';
 import {
@@ -6,6 +6,7 @@ import {
   Scenario,
   SCENARIO_STORAGE_KEY,
   SCENARIO_VERSION,
+  normalizeNumericText,
   parseScenarioJson,
   serializeScenario,
   unknownScenarioModelIds,
@@ -41,7 +42,7 @@ function readStoredScenario(): { scenario: Scenario | null; warning: string | nu
 }
 
 export function useScenarioPersistence(catalog: Model[]) {
-  const { plan, setPlan } = usePlan();
+  const { plan, setPlan, clearPlan } = usePlan();
   const restored = useMemo(readStoredScenario, []);
   const [entries, setEntries] = useState(restored.scenario?.entries ?? []);
   const [observed, setObserved] = useState(restored.scenario?.observedPercent ?? '');
@@ -52,6 +53,7 @@ export function useScenarioPersistence(catalog: Model[]) {
   );
   const [hydrated, setHydrated] = useState(false);
   const [storageNotice, setStorageNotice] = useState<string | null>(restored.warning);
+  const skipNextPersist = useRef(false);
 
   // The stored plan lives in PlanContext; keep it in sync after the initial read.
   useEffect(() => {
@@ -80,17 +82,18 @@ export function useScenarioPersistence(catalog: Model[]) {
 
   useEffect(() => {
     if (!hydrated) return;
+    if (skipNextPersist.current) {
+      skipNextPersist.current = false;
+      return;
+    }
     const timeout = window.setTimeout(() => {
-      const safeNumericText = (value: string) => (
-        /^\d*(?:[.,]\d*)?$/.test(value) ? value : ''
-      );
       const scenario: Scenario = {
         version: SCENARIO_VERSION,
         plan,
         entries,
-        observedPercent: safeNumericText(observed),
+        observedPercent: normalizeNumericText(observed),
         hypotheses,
-        budgetUsd: safeNumericText(budget),
+        budgetUsd: normalizeNumericText(budget),
         budgetAllocations,
       };
       try {
@@ -155,9 +158,9 @@ export function useScenarioPersistence(catalog: Model[]) {
       version: SCENARIO_VERSION,
       plan,
       entries,
-      observedPercent: observed,
+      observedPercent: normalizeNumericText(observed),
       hypotheses,
-      budgetUsd: budget,
+      budgetUsd: normalizeNumericText(budget),
       budgetAllocations,
     };
     const blob = new Blob([serializeScenario(scenario)], { type: 'application/json' });
@@ -206,18 +209,26 @@ export function useScenarioPersistence(catalog: Model[]) {
   }
 
   function clearSavedScenario() {
+    const hasScenarioData = entries.length > 0
+      || hypotheses.length > 0
+      || Object.keys(budgetAllocations).length > 0
+      || observed.trim().length > 0
+      || budget.trim().length > 0;
+    if (hasScenarioData || plan !== 'go') {
+      skipNextPersist.current = true;
+    }
     setEntries([]);
     setObserved('');
     setHypotheses([]);
     setBudget('');
     setBudgetAllocations({});
-    setPlan('go');
+    clearPlan();
     try {
       window.localStorage.removeItem(SCENARIO_STORAGE_KEY);
     } catch {
       // No-op: the in-memory scenario is already cleared.
     }
-    setStorageNotice('Escenario y datos guardados eliminados.');
+    setStorageNotice('Escenario y preferencia de plan eliminados de este navegador.');
   }
 
   return {
