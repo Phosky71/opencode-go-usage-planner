@@ -32,8 +32,13 @@ export default function App() {
                   <span className="text-gradient-cyan">Operia</span> <span className="text-white/80">Systems</span>
                 </span>
               </a>
-              <div className="text-xs text-white/40">
-                OpenCode Go Usage Planner · Herramienta independiente
+              <div className="flex items-center gap-3 text-xs text-white/55">
+                <a href="/proyectos/" className="transition-colors hover:text-cyan-400">
+                  ← Proyectos
+                </a>
+                <span className="hidden sm:inline">
+                  OpenCode Go Usage Planner · Herramienta independiente
+                </span>
               </div>
             </div>
           </header>
