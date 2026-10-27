@@ -1,5 +1,9 @@
 # Arquitectura inicial
 
+> **Nota (2026-10-27):** este documento describe la propuesta inicial. La implementación final
+> usa React 18 + Vite 5 + TypeScript, no Next.js. Consulta `docs/project-state.md` y
+> `README.md` para el estado actual.
+
 ## Principios
 - **Local-first:** el cálculo y los datos personales se procesan en el navegador.
 - **Determinista:** una misma entrada validada produce siempre el mismo resultado.

@@ -8,53 +8,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Static same-origin integration under `/proyectos/opencode-go-usage-planner/app/`
-- Back link from the application header to `/proyectos/`
-- Relative Vite base (`base: './'`) for subpath hosting
-- This integration does not change the catalog-update model: updates remain CLI/CI only
-
-### Fixed
-- Budget summary precedence bug in the calculator
-- Budget total display now uses the calculated total plus additional allocation
-- Removed an unused import that was bundled into the client
-
-### Changed
-- Catalog updater is no longer imported by the browser catalog context
-- Client JS bundle reduced from ~368 KB to ~246 KB (uncompressed)
-- ESLint flat config corrected for ESLint 9; lint now runs with warnings only
-
-### Added (initial implementation)
-- Initial implementation of OpenCode Go Usage Planner
-- Model catalog with 72 models (36 Go + 36 Go Plus) extracted from official OpenCode documentation
-- Calculator for quota consumption using formula P_i = 100 × C_i / L_i
-- Plan selector (OpenCode Go / Go Plus) with visual cards
-- Model comparator with sortable columns (limit, price, contribution per dollar)
-- Budget planner with editable allocations
-- Scenario simulation with hypothetical spending
-- Unlimited model handling (null limit, not zero)
-- Strikethrough price extraction (current price, not old)
-- GitHub Actions workflow for automated catalog updates
-- CLI script for catalog updates (`npx tsx scripts/update-catalog.ts`)
-- Integrity validation with Zod schemas
-- Partial extraction protection (minimum models per plan, suspicious change detection)
-- Atomic file write (temp file + rename)
-- 58 automated tests (calculations, parser, integrity, UI)
-- Operia Systems visual identity (dark theme, cyan/emerald accents, glass effect)
-- Responsive design (mobile cards, desktop tables)
-- Tools panel with catalog status and update command
+- Explicit catalog provenance: `sourceType`, `verification`, `verifiedAt`, `verifiedBy`.
+- Explicit `limitStatus`: `known`, `unlimited` or `unknown`.
+- Local scenario persistence in `localStorage` under `operia.planner.scenario.v1`.
+- JSON export/import of scenarios, version 1, validated with Zod.
+- Import size and item limits; unknown model IDs are rejected.
+- “Borrar datos” action for local scenario and plan.
+- UI tests for calculation, persistence and budget excess.
+- Parser tests for unknown limits and unknown prices.
+- Scenario schema, serialization and invalid-input tests.
+- Catalog validation with Zod on load.
+- 74 automated tests.
 
 ### Changed
-- Migrated from Tailwind CSS v3 to v4
-- Separated client/server code (removed fs/path from browser bundle)
-- Moved catalog persistence to Node-only module
+- Catalog records are now `official_document` + `auto_extracted`, not `official_verified`.
+- Confidence for auto-extracted records is `medium`.
+- Unknown monthly limits are `null` with `limitStatus: unknown`; they are not zero.
+- `-`/`—`/`n/a` prices are missing values, not free.
+- Budget panel shows total, assigned, unassigned and excess; excess is never silently redistributed.
+- Plan selection is persisted locally.
+- ESLint flat config repaired for ESLint 9.
+- Vite base is relative for subpath hosting.
 
 ### Fixed
-- CSS import missing in main.tsx (styles not loading)
-- Hardcoded table indices in parser (now identified by headers)
-- Duplicate model IDs between Go and Go Plus plans
-- Unlimited models represented as 0 instead of null
-- Strikethrough prices extracted as old values instead of current
-- fs/path module in client bundle causing Vite error
+- Budget summary precedence bug.
+- Budget total display after additional allocations.
+- Unused import bundled into the client.
+- `no-case-declarations` in the comparator.
+- Unknown/blank limit handling in the parser.
+- UI test configuration now includes `.test.tsx` files and setup.
+
+### Removed
+- Client-side catalog updater import from the browser bundle.
+- Unused `contributionPerDollar` import from the calculator.
+- Broken placeholder UI test and the out-of-config UI test.
 
 ## [0.1.0] - 2026-10-26
 

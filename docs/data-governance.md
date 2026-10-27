@@ -1,11 +1,24 @@
 # Gobierno y calidad de datos
 
 ## Estados de procedencia
-- `official_verified`: confirmado en una fuente oficial accesible, con URL y fecha.
+- `official_document`: extraído de documentación oficial accesible, con URL y fecha. No implica revisión manual.
+- `official_verified`: confirmado en una fuente oficial y revisado manualmente; reservado para registros con `verification: manually_verified`.
 - `support_confirmed`: confirmado en una respuesta de soporte facilitada por el usuario; indicar que no equivale necesariamente a documentación pública.
 - `user_entered`: introducido por la persona usuaria.
 - `estimated`: calculado a partir de datos incompletos o supuestos explícitos.
 - `unknown`: no se ha podido verificar.
+
+## Estados de verificación
+- `auto_extracted`: el registro se extrajo automáticamente y no ha pasado por revisión manual.
+- `manually_verified`: una persona contrastó el registro con la fuente; debe incluir `verifiedAt` y, si procede, `verifiedBy`.
+- `unverified`: la procedencia no permite atribuir verificación.
+
+## Semántica del límite mensual
+- `limitStatus: known`: `monthlyLimitUsd` es un número mayor o igual que cero.
+- `limitStatus: unlimited`: el proveedor indica límite ilimitado; `monthlyLimitUsd` es `null`.
+- `limitStatus: unknown`: la fuente no permite interpretar el límite; `monthlyLimitUsd` es `null` y no debe tratarse como gratuito.
+
+Un valor desconocido no se convierte en cero. Un precio `-`, `—`, `n/a` o vacío es un dato ausente, no un precio gratuito; `Free`/`Gratis` sí se representa como cero.
 
 No mezclar el estado de procedencia con la calidad del modelo ni con su popularidad.
 
