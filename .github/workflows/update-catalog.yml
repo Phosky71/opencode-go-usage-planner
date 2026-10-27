@@ -26,9 +26,12 @@ jobs:
         run: npm ci
 
       - name: Run Catalog Scraper
-        run: npx tsx scripts/update-catalog.ts
+        run: npm run update:catalog
         env:
           NODE_ENV: production
+
+      - name: Run tests
+        run: npm test
 
       - name: Check for changes
         id: git-check

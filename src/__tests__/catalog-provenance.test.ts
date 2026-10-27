@@ -3,6 +3,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { parseGoDocsDetailed, parseModelsApi } from '../catalog/parsers';
 import { CatalogSchema } from '../catalog/schema';
+import { validateIntegrity } from '../catalog/integrity';
 import { getLimitStatus, formatMonthlyLimit, Model } from '../domain/models';
 import { computeContribution, contributionPerDollar, hypotheticalContribution } from '../domain/calculations';
 
@@ -92,9 +93,10 @@ describe('catalog provenance', () => {
     expect(item.confidence).toBe('low');
   });
 
-  test('all 72 committed records declare automatic provenance', () => {
+  test('the committed catalog passes integrity checks and declares automatic provenance', () => {
     const data = JSON.parse(readFileSync(resolve('src/data/models.json'), 'utf-8')) as Model[];
-    expect(data).toHaveLength(72);
+    const integrity = validateIntegrity(data);
+    expect(integrity.errors).toEqual([]);
     for (const item of data) {
       expect(item.sourceType).toBe('official_document');
       expect(item.verification).toBe('auto_extracted');
