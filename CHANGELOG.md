@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Static same-origin integration under `/proyectos/opencode-go-usage-planner/app/`
+- Back link from the application header to `/proyectos/`
+- Relative Vite base (`base: './'`) for subpath hosting
+- This integration does not change the catalog-update model: updates remain CLI/CI only
+
+### Fixed
+- Budget summary precedence bug in the calculator
+- Budget total display now uses the calculated total plus additional allocation
+- Removed an unused import that was bundled into the client
+
+### Changed
+- Catalog updater is no longer imported by the browser catalog context
+- Client JS bundle reduced from ~368 KB to ~246 KB (uncompressed)
+- ESLint flat config corrected for ESLint 9; lint now runs with warnings only
+
+### Added (initial implementation)
 - Initial implementation of OpenCode Go Usage Planner
 - Model catalog with 72 models (36 Go + 36 Go Plus) extracted from official OpenCode documentation
 - Calculator for quota consumption using formula P_i = 100 × C_i / L_i

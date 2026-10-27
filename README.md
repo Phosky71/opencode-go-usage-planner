@@ -16,6 +16,12 @@ Aplicación web open source para calcular, comparar y simular el consumo de las 
 - **Actualización automática** vía GitHub Actions
 - **58 tests automatizados**
 
+## Integración en Operia Systems
+
+El build se sirve en `https://operiasystems.com/proyectos/opencode-go-usage-planner/app/` como aplicación estática independiente. `vite.config.ts` usa `base: './'` para que los assets funcionen bajo esa subruta. La cabecera incluye un enlace de vuelta a `/proyectos/`.
+
+La actualización del catálogo sigue siendo una operación de desarrollo/CI (`scripts/update-catalog.ts` o GitHub Actions); no se ejecuta desde el navegador. La aplicación no tiene backend, cuentas ni claves API.
+
 ## Comandos
 
 ```bash
