@@ -7,7 +7,6 @@ import {
   computeContribution,
   totalContribution,
   computeDifference,
-  contributionPerDollar,
   hypotheticalContribution,
 } from '../../domain/calculations';
 
@@ -249,10 +248,10 @@ export const Calculator: React.FC = () => {
       {result && (
         <div className="p-4 border border-white/10 rounded-xl bg-white/5 space-y-2">
           <p className="text-lg font-bold text-white">
-            Consumo estimado de cuota compartida: <span className="text-cyan-400">{result.total.toFixed(2)} %</span>
+            Consumo estimado de cuota compartida: <span className="text-cyan-400">{result.total.toFixed(2)} %</span>
           </p>
           <p className="text-sm text-white/70">
-            Margen estimado restante: <span className="text-emerald-400 font-semibold">{result.remaining.toFixed(2)} %</span>
+            Margen estimado restante: <span className="text-emerald-400 font-semibold">{result.remaining.toFixed(2)} %</span>
           </p>
           {result.hasUnlimited && (
             <p className="text-amber-400 text-sm">
@@ -263,7 +262,7 @@ export const Calculator: React.FC = () => {
           {observed && (
             <>
               <p className="text-sm text-white/60">
-                Porcentaje observado en consola: {Number(observed).toFixed(2)} %
+                Porcentaje observado en consola: {Number(observed).toFixed(2)} %
               </p>
               <p className="text-sm text-white/60">
                 Diferencia (puntos %): {result.diff.toFixed(2)}
@@ -340,10 +339,10 @@ export const Calculator: React.FC = () => {
             </ul>
             <div className="mt-3 p-3 border border-white/10 rounded-xl bg-white/5">
               <p className="text-sm text-white/80">
-                Consumo combinado estimado: <span className="text-cyan-400 font-bold">{combinedTotal.toFixed(2)} %</span>
+                Consumo combinado estimado: <span className="text-cyan-400 font-bold">{combinedTotal.toFixed(2)} %</span>
               </p>
               <p className="text-sm text-white/70">
-                Margen estimado restante: <span className="text-emerald-400 font-semibold">{combinedRemaining.toFixed(2)} %</span>
+                Margen estimado restante: <span className="text-emerald-400 font-semibold">{combinedRemaining.toFixed(2)} %</span>
               </p>
               {combinedTotal > 100 && (
                 <p className="text-red-400 text-sm mt-1">
@@ -433,13 +432,13 @@ export const Calculator: React.FC = () => {
         {budgetNum > 0 && Object.keys(budgetAllocations).length > 0 && (
           <div className="p-3 border border-white/10 rounded-xl bg-white/5">
             <p className="text-sm text-white/80">
-              Contribución adicional estimada: <span className="text-cyan-400 font-bold">{totalBudgetContribution.toFixed(2)} %</span>
+              Contribución adicional estimada: <span className="text-cyan-400 font-bold">{totalBudgetContribution.toFixed(2)} %</span>
             </p>
             <p className="text-sm text-white/70">
-              Consumo acumulado después: <span className="text-cyan-400">{(result?.total || 0 + totalBudgetContribution).toFixed(2)} %</span>
+              Consumo acumulado después: <span className="text-cyan-400">{((result?.total ?? 0) + totalBudgetContribution).toFixed(2)} %</span>
             </p>
             <p className="text-sm text-white/70">
-              Margen restante estimado: <span className="text-emerald-400 font-semibold">{(100 - (result?.total || 0) - totalBudgetContribution).toFixed(2)} %</span>
+              Margen restante estimado: <span className="text-emerald-400 font-semibold">{(100 - (result?.total || 0) - totalBudgetContribution).toFixed(2)} %</span>
             </p>
             {(result?.total || 0) + totalBudgetContribution > 100 && (
               <p className="text-red-400 text-sm mt-1">

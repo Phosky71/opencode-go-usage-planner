@@ -36,11 +36,12 @@ export const ModelComparator: React.FC = () => {
       case 'output':
         cmp = (a.priceOutputUsd ?? Infinity) - (b.priceOutputUsd ?? Infinity);
         break;
-      case 'contribPerDollar':
+      case 'contribPerDollar': {
         const aCpd = contributionPerDollar(a) ?? Infinity;
         const bCpd = contributionPerDollar(b) ?? Infinity;
         cmp = aCpd - bCpd;
         break;
+      }
     }
     return sortAsc ? cmp : -cmp;
   });

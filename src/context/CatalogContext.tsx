@@ -1,12 +1,10 @@
 // src/context/CatalogContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Model } from '../domain/models';
-import { updateCatalog } from '../catalog/updater';
 import catalogData from '../data/models.json';
 
 interface CatalogContextValue {
   catalog: Model[];
-  refresh: () => Promise<{ added: number; updated: number; errors?: string[] }[]>;
   loading: boolean;
   error?: string;
   lastUpdated: string | null;
@@ -40,38 +38,8 @@ export const CatalogProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   }, []);
 
-  // Refresh: fetches from official sources and updates in-memory state
-  // NOTE: In a static site, this only updates React state, not the persisted file.
-  // The persisted catalog is updated via GitHub Actions or CLI (scripts/update-catalog.ts).
-  const refresh = async () => {
-    setLoading(true);
-    try {
-      const results = await updateCatalog();
-      // Update in-memory catalog with newly parsed models
-      for (const r of results) {
-        if (r.parsedModels && r.parsedModels.length > 0 && !r.errors) {
-          setCatalog(prev => {
-            const map = new Map(prev.map(m => [m.id, m]));
-            for (const model of r.parsedModels!) {
-              map.set(model.id, model);
-            }
-            return Array.from(map.values());
-          });
-          setLastUpdated(new Date().toISOString());
-        }
-      }
-      setLoading(false);
-      return results.map(r => ({ added: 0, updated: r.totalParsed, errors: r.errors }));
-    } catch (e) {
-      const err = e instanceof Error ? e.message : String(e);
-      setError(err);
-      setLoading(false);
-      return [];
-    }
-  };
-
   return (
-    <CatalogContext.Provider value={{ catalog, refresh, loading, error, lastUpdated }}>
+    <CatalogContext.Provider value={{ catalog, loading, error, lastUpdated }}>
       {children}
     </CatalogContext.Provider>
   );
