@@ -57,8 +57,8 @@ export const Calculator: React.FC = () => {
   const [importError, setImportError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const planNote = plan === 'go' ? 'Go plan' : 'Go Plus plan';
-  const planCatalog = catalog.filter(m => m.notes === planNote);
+  const planName = plan === 'go' ? 'Go' : 'Go Plus';
+  const planCatalog = catalog.filter(m => m.plan === planName && !m.deprecated);
 
   const addEntry = () => {
     if (!modelId || !consumptionUsd) return;

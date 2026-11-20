@@ -15,6 +15,8 @@ export type VerificationStatus =
 
 export type LimitStatus = 'known' | 'unlimited' | 'unknown';
 
+export type PlanName = 'Go' | 'Go Plus';
+
 export interface Model {
   /** Unique identifier for the model, e.g., "glm-5.3" */
   id: string;
@@ -22,6 +24,8 @@ export interface Model {
   displayName: string;
   /** Provider name, e.g., "OpenCode" */
   provider: string;
+  /** Plan this record belongs to (Go / Go Plus). Absent for price-only records. */
+  plan?: PlanName;
   /** Monthly limit in USD (as defined by the provider). null = unlimited or unknown. */
   monthlyLimitUsd: number | null;
   /**
@@ -37,7 +41,17 @@ export interface Model {
   priceInputUsd?: number;
   /** Optional: price per 1M tokens (output) */
   priceOutputUsd?: number;
-  /** Data provenance */
+  /** Optional: cached read price per 1M tokens */
+  cachedReadPrice?: number;
+  /** Optional: cached write price per 1M tokens */
+  cachedWritePrice?: number;
+  /** Estimated requests per 5 hours for this plan. null = unknown. */
+  estRequests5h?: number | null;
+  /** Data provenance for price fields (independent from limits) */
+  priceSource?: string;
+  /** Data provenance for limit fields (independent from price) */
+  limitsSource?: string;
+  /** Data provenance for all fields (legacy / general) */
   sourceUrl: string;
   checkedAt: string; // ISO timestamp
   sourceType: SourceType;
@@ -55,6 +69,8 @@ export interface Model {
   notes?: string;
   /** Optional: model active/retired flag */
   active?: boolean;
+  /** If true, this model is deprecated (no longer in the source) but kept for historical reference */
+  deprecated?: boolean;
 }
 
 export interface ConsumptionEntry {

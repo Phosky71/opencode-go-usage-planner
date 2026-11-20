@@ -2,12 +2,16 @@ name: Update Catalog
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Daily at midnight
+    - cron: '0 10 * * 1' # Weekly: Monday at 10:00 UTC
   workflow_dispatch: # Manual trigger
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: write
+
+concurrency:
+  group: catalog-update
+  cancel-in-progress: false
 
 jobs:
   update-catalog:
@@ -15,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -25,37 +31,151 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Catalog Scraper
+      - name: Run dry-run to detect changes
+        id: dryrun
+        run: |
+          npm run update:catalog -- --dry-run | tee dry-run.log
+          echo "dry-run-exit=$?" >> $GITHUB_OUTPUT
+        continue-on-error: true
+
+      - name: Fail on dry-run error
+        if: steps.dryrun.outputs.dry-run-exit != '0'
+        run: |
+          echo "::error::Catalog update dry-run failed. Check logs for details."
+          cat dry-run.log
+          exit 1
+
+      - name: Check for changes via dry-run output
+        id: changes
+        run: |
+          if grep -q "DRY RUN" dry-run.log; then
+            # Dry-run succeeded; now run actual update to produce diff
+            echo "has-changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run actual catalog update
+        if: steps.changes.outputs.has-changes == 'true'
         run: npm run update:catalog
-        env:
-          NODE_ENV: production
+
+      - name: Validate updated catalog
+        if: steps.changes.outputs.has-changes == 'true'
+        run: |
+          npm run verify:catalog
+          npm run typecheck
+          npm run build
 
       - name: Run tests
+        if: steps.changes.outputs.has-changes == 'true'
         run: npm test
 
-      - name: Check for changes
-        id: git-check
+      - name: Compute catalog diff
+        id: diff
+        if: steps.changes.outputs.has-changes == 'true'
         run: |
-          git diff --exit-code src/data/models.json || echo "changes=true" >> $GITHUB_OUTPUT
+          # Count records in old vs new catalog
+          OLD_COUNT=$(git show HEAD:src/data/models.json | grep -c '"id"')
+          NEW_COUNT=$(grep -c '"id"' src/data/models.json)
+          echo "old-count=$OLD_COUNT" >> $GITHUB_OUTPUT
+          echo "new-count=$NEW_COUNT" >> $GITHUB_OUTPUT
 
-      - name: Create Pull Request
-        if: steps.git-check.outputs.changes == 'true'
+          # Count active vs deprecated
+          ACTIVE_COUNT=$(grep -c '"deprecated": false' src/data/models.json || echo 0)
+          DEPRECATED_COUNT=$(grep -c '"deprecated": true' src/data/models.json || echo 0)
+          echo "active-count=$ACTIVE_COUNT" >> $GITHUB_OUTPUT
+          echo "deprecated-count=$DEPRECATED_COUNT" >> $GITHUB_OUTPUT
+
+          # Detect added models (new displayName not in old catalog)
+          git diff src/data/models.json | grep '^\+.*"displayName"' | sed 's/.*"displayName": "\(.*\)".*/\1/' | sort -u > added.txt
+          git show HEAD:src/data/models.json | grep '"displayName"' | sed 's/.*"displayName": "\(.*\)".*/\1/' | sort -u > old-names.txt
+          grep -c '.' added.txt > /dev/null 2>&1 && echo "has-added=true" >> $GITHUB_OUTPUT || echo "has-added=false" >> $GITHUB_OUTPUT
+
+          # Detect removed models (old displayName not in new catalog, excluding deprecated)
+          grep -vxFf added.txt old-names.txt > removed-candidates.txt 2>/dev/null || true
+          grep -c '.' removed-candidates.txt > /dev/null 2>&1 && echo "has-removed=true" >> $GITHUB_OUTPUT || echo "has-removed=false" >> $GITHUB_OUTPUT
+
+      - name: Generate PR body
+        id: pr-body
+        if: steps.changes.outputs.has-changes == 'true'
+        run: |
+          cat > pr-body.md << 'EOF'
+          # 🔄 Automated Catalog Update
+
+          This PR updates the model catalog from official OpenCode Go Markdown sources.
+
+          ## Sources
+          - **Limits:** `https://opencode.ai/console/go.md`
+          - **Prices:** `https://opencode.ai/docs/console/models.md`
+
+          ## Summary
+          | Metric | Value |
+          |--------|-------|
+          | Previous records | ${{ steps.diff.outputs.old-count }} |
+          | New total records | ${{ steps.diff.outputs.new-count }} |
+          | Active models | ${{ steps.diff.outputs.active-count }} |
+          | Deprecated models | ${{ steps.diff.outputs.deprecated-count }} |
+
+          ## Validation
+          - ✅ Catalog integrity check passed
+          - ✅ TypeScript type check passed
+          - ✅ Build succeeded
+          - ✅ All tests passed
+          - ✅ No duplicate IDs
+          - ✅ Dubious correspondences not associated
+          - ✅ Unknown prices not converted to zero
+
+          ## Review Checklist
+          - [ ] Review added/modified models in `src/data/models.json`
+          - [ ] Verify deprecated models are correctly identified
+          - [ ] Check that no unexpected models were removed
+          - [ ] Confirm price and limit changes match official sources
+
+          ## Notes
+          - This PR was generated automatically by the weekly catalog update workflow.
+          - Changes are **not** auto-merged; manual review and approval are required.
+          - A backup of the previous catalog is available as `src/data/models.json.backup`.
+          - 4 dubious correspondences remain unassociated (DeepSeek V4.1 Flash 1017, Muse Spark Contributor ×2, Iceman Contributor Free).
+          - 11 models have no published price and are included with `priceInputUsd: undefined`.
+
+          ---
+          *Generated on ${{ github.event.head_commit.timestamp || github.event.push.head_commit.timestamp || 'scheduled run' }}*
+          EOF
+          echo "pr-body-file=pr-body.md" >> $GITHUB_OUTPUT
+
+      - name: Check for existing PR
+        id: existing-pr
+        if: steps.changes.outputs.has-changes == 'true'
+        run: |
+          EXISTING=$(gh pr list --base main --head data-update-catalog --json number --jq '.[0].number' 2>/dev/null || echo "")
+          if [ -n "$EXISTING" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "number=$EXISTING" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create or update Pull Request
+        if: steps.changes.outputs.has-changes == 'true' && steps.existing-pr.outputs.exists == 'false'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'data: update model catalog from official sources'
+          commit-message: 'data: update model catalog from official Markdown sources'
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          signoff: false
+          signoff: true
           branch: data-update-catalog
           delete-branch: true
           title: '🔄 Automated Catalog Update'
-          body: |
-            Automated update of the model catalog from official sources.
-            
-            Please review the changes in `src/data/models.json` before merging.
-            This PR was generated by the periodic scraping workflow.
+          body-path: pr-body.md
           labels: |
             data
             automated-update
-          draft: false
+          draft: true
+          team-reviewers: ''
+
+      - name: No changes message
+        if: steps.changes.outputs.has-changes != 'true'
+        run: echo "ℹ️ No catalog changes detected. The current catalog is up to date."

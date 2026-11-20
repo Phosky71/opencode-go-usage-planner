@@ -1,7 +1,7 @@
 // src/catalog/updater.ts
 import { Source, SOURCES } from './source-registry';
 import { fetchUrl } from './fetcher';
-import { parseGoDocs, parseGoDocsDetailed, parseModelsApi } from './parsers';
+import { parseGoDocs, parseGoDocsDetailed, parseModelsApi, parseMarkdownLimits, parseMarkdownPrices } from './parsers';
 import { Model } from '../domain/models';
 import { CatalogSchema } from './schema';
 import { validateIntegrity } from './integrity';
@@ -54,6 +54,32 @@ export async function updateCatalog(_options: UpdateOptions = {}): Promise<Updat
       
       if (source.parserName === 'parseGoDocs') {
         const detailed = parseGoDocsDetailed(source, fetched.body);
+        parsed = detailed.models;
+        skippedRows = detailed.metrics.skippedRows;
+        skippedReasons = detailed.metrics.skippedReasons;
+        metrics = detailed.metrics;
+        
+        if (skippedRows > 0) {
+          res.integrityCheck.warnings = [
+            ...res.integrityCheck.warnings,
+            `${skippedRows} rows were skipped during parsing: ${skippedReasons.join('; ')}`
+          ];
+        }
+      } else if (source.parserName === 'parseMarkdownLimits') {
+        const detailed = parseMarkdownLimits(source, fetched.body);
+        parsed = detailed.models;
+        skippedRows = detailed.metrics.skippedRows;
+        skippedReasons = detailed.metrics.skippedReasons;
+        metrics = detailed.metrics;
+        
+        if (skippedRows > 0) {
+          res.integrityCheck.warnings = [
+            ...res.integrityCheck.warnings,
+            `${skippedRows} rows were skipped during parsing: ${skippedReasons.join('; ')}`
+          ];
+        }
+      } else if (source.parserName === 'parseMarkdownPrices') {
+        const detailed = parseMarkdownPrices(source, fetched.body);
         parsed = detailed.models;
         skippedRows = detailed.metrics.skippedRows;
         skippedReasons = detailed.metrics.skippedReasons;

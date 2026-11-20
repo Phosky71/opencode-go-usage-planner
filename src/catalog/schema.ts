@@ -7,11 +7,17 @@ export const CatalogSchema = z.array(z.object({
   id: z.string().min(1),
   displayName: z.string().min(1),
   provider: z.string().min(1),
+  plan: z.enum(['Go', 'Go Plus']).optional(),
   monthlyLimitUsd: z.number().nonnegative().nullable(),
   limitStatus: z.enum(['known', 'unlimited', 'unknown']).optional(),
   unlimited: z.boolean().optional(),
   priceInputUsd: z.number().nonnegative().optional(),
   priceOutputUsd: z.number().nonnegative().optional(),
+  cachedReadPrice: z.number().nonnegative().optional(),
+  cachedWritePrice: z.number().nonnegative().optional(),
+  estRequests5h: z.number().nonnegative().nullable().optional(),
+  priceSource: z.string().url().optional(),
+  limitsSource: z.string().url().optional(),
   sourceUrl: z.string().url(),
   checkedAt: z.string().datetime(),
   sourceType: z.enum([
@@ -28,6 +34,7 @@ export const CatalogSchema = z.array(z.object({
   confidence: z.enum(['high', 'medium', 'low']),
   notes: z.string().optional(),
   active: z.boolean().optional(),
+  deprecated: z.boolean().optional(),
 }).refine(
   (data) => {
     const status = data.limitStatus

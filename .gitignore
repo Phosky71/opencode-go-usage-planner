@@ -10,3 +10,13 @@ coverage/
 *.log
 playwright-report/
 test-results/
+
+# Backup files
+*.backup
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Generated Vite/Vitest declaration files
+vite.config.d.ts
+vitest.config.d.ts

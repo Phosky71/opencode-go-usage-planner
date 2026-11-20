@@ -14,8 +14,8 @@ export const ModelComparator: React.FC = () => {
   const [sortAsc, setSortAsc] = useState(true);
   const [filterText, setFilterText] = useState('');
 
-  const planNote = plan === 'go' ? 'Go plan' : 'Go Plus plan';
-  const planCatalog = catalog.filter(m => m.notes === planNote);
+  const planName = plan === 'go' ? 'Go' : 'Go Plus';
+  const planCatalog = catalog.filter(m => m.plan === planName && !m.deprecated);
 
   const filtered = planCatalog.filter(m =>
     m.displayName.toLowerCase().includes(filterText.toLowerCase())

@@ -27,8 +27,8 @@ export const ModelCatalog: React.FC = () => {
   const { catalog, loading, error } = useCatalog();
   const { plan } = usePlan();
 
-  const planNote = plan === 'go' ? 'Go plan' : 'Go Plus plan';
-  const filteredCatalog = catalog.filter(m => m.notes === planNote);
+  const planName = plan === 'go' ? 'Go' : 'Go Plus';
+  const filteredCatalog = catalog.filter(m => m.plan === planName && !m.deprecated);
 
   if (loading) return <p className="text-white/60">Cargando catálogo…</p>;
   if (error) return <p className="text-red-400">Error al cargar el catálogo: {error}</p>;

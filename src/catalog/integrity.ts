@@ -42,9 +42,10 @@ export interface ComparisonResult {
   };
 }
 
-// Minimum expected models per plan (based on current official docs)
-const MIN_GO_MODELS = 20;
-const MIN_GO_PLUS_MODELS = 20;
+// Minimum expected models per plan (based on current official docs — 32 limit models,
+// expanded to more records by context variants).
+const MIN_GO_MODELS = 30;
+const MIN_GO_PLUS_MODELS = 30;
 const MAX_REDUCTION_PERCENT = 15; // Max 15% reduction per plan without explicit approval (lowered from 30%)
 
 /**
@@ -63,9 +64,9 @@ export function validateIntegrity(
     errors.push('No models extracted');
   }
 
-  // Separate by plan
-  const goModels = models.filter(m => m.notes === 'Go plan');
-  const goPlusModels = models.filter(m => m.notes === 'Go Plus plan');
+  // Separate by plan — use plan field if available, otherwise fall back to notes prefix
+  const goModels = models.filter(m => m.plan === 'Go' || (m.plan === undefined && m.notes && m.notes.startsWith('Go plan')));
+  const goPlusModels = models.filter(m => m.plan === 'Go Plus' || (m.plan === undefined && m.notes && m.notes.startsWith('Go Plus plan')));
 
   if (goModels.length < MIN_GO_MODELS) {
     errors.push(`Go plan has only ${goModels.length} models (minimum: ${MIN_GO_MODELS})`);
@@ -201,11 +202,11 @@ export function compareCatalogs(
     reason = `Catalog reduced by ${variationPercent.toFixed(1)}% (from ${previousCount} to ${newCount} models). Threshold: ${MAX_REDUCTION_PERCENT}%`;
   }
 
-  // Check for complete plan removal
-  const prevGo = previous.filter(m => m.notes === 'Go plan').length;
-  const prevGoPlus = previous.filter(m => m.notes === 'Go Plus plan').length;
-  const currGo = current.filter(m => m.notes === 'Go plan').length;
-  const currGoPlus = current.filter(m => m.notes === 'Go Plus plan').length;
+  // Check for complete plan removal (use structured `plan` field, fallback to `notes`)
+  const prevGo = previous.filter(m => m.plan === 'Go' || m.notes === 'Go plan').length;
+  const prevGoPlus = previous.filter(m => m.plan === 'Go Plus' || m.notes === 'Go Plus plan').length;
+  const currGo = current.filter(m => m.plan === 'Go' || m.notes === 'Go plan').length;
+  const currGoPlus = current.filter(m => m.plan === 'Go Plus' || m.notes === 'Go Plus plan').length;
 
   if (prevGo > 0 && currGo === 0) {
     suspicious = true;
