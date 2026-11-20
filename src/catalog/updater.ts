@@ -31,7 +31,7 @@ export interface UpdateOptions {
 export async function updateCatalog(_options: UpdateOptions = {}): Promise<UpdateResult[]> {
   const results: UpdateResult[] = [];
 
-  for (const source of SOURCES) {
+  for (const source of SOURCES.filter(s => !s.disabled)) {
     const res: UpdateResult = {
       sourceId: source.id,
       fetchedAt: new Date().toISOString(),

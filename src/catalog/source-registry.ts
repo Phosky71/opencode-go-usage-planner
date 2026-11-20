@@ -9,6 +9,8 @@ export interface Source {
   parserName: string;
   frequency: 'daily' | 'weekly' | 'on-demand';
   notes?: string;
+  /** When true, this source is skipped during updates and verification */
+  disabled?: boolean;
 }
 
 export const SOURCES: Source[] = [
@@ -44,5 +46,6 @@ export const SOURCES: Source[] = [
     parserName: 'parseGoDocs',
     frequency: 'daily',
     notes: 'Legacy HTML parser. This source is deprecated; use opencode-go-limits and opencode-go-prices instead.',
+    disabled: true,
   },
 ];

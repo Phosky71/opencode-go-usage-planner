@@ -46,6 +46,8 @@ export interface ComparisonResult {
 // expanded to more records by context variants).
 const MIN_GO_MODELS = 30;
 const MIN_GO_PLUS_MODELS = 30;
+// Minimum total models for sources without plan distinction (e.g. prices-only source).
+const MIN_TOTAL_MODELS = 50;
 const MAX_REDUCTION_PERCENT = 15; // Max 15% reduction per plan without explicit approval (lowered from 30%)
 
 /**
@@ -68,11 +70,18 @@ export function validateIntegrity(
   const goModels = models.filter(m => m.plan === 'Go' || (m.plan === undefined && m.notes && m.notes.startsWith('Go plan')));
   const goPlusModels = models.filter(m => m.plan === 'Go Plus' || (m.plan === undefined && m.notes && m.notes.startsWith('Go Plus plan')));
 
-  if (goModels.length < MIN_GO_MODELS) {
-    errors.push(`Go plan has only ${goModels.length} models (minimum: ${MIN_GO_MODELS})`);
-  }
-  if (goPlusModels.length < MIN_GO_PLUS_MODELS) {
-    errors.push(`Go Plus plan has only ${goPlusModels.length} models (minimum: ${MIN_GO_PLUS_MODELS})`);
+  // If no models have a plan field, this is a prices-only source — use total minimum instead
+  const hasPlanDistinction = goModels.length > 0 || goPlusModels.length > 0;
+  if (hasPlanDistinction) {
+    if (goModels.length < MIN_GO_MODELS) {
+      errors.push(`Go plan has only ${goModels.length} models (minimum: ${MIN_GO_MODELS})`);
+    }
+    if (goPlusModels.length < MIN_GO_PLUS_MODELS) {
+      errors.push(`Go Plus plan has only ${goPlusModels.length} models (minimum: ${MIN_GO_PLUS_MODELS})`);
+    }
+  } else if (models.length > 0 && models.length < MIN_TOTAL_MODELS) {
+    // Prices-only source: check total model count instead
+    errors.push(`Source has only ${models.length} models total (minimum: ${MIN_TOTAL_MODELS})`);
   }
 
   // Check for duplicate IDs

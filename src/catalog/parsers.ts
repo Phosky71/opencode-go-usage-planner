@@ -615,15 +615,20 @@ export function parseMarkdownPrices(source: Source, markdown: string): MarkdownP
     const cachedWritePrice = parseMdPrice(row.cells[4]);
 
     // Generate slug ID
+    const isContextVariant = rawModelName.includes('≤') || rawModelName.includes('>');
+    const contextSuffix = isContextVariant
+      ? (rawModelName.includes('≤') ? '-low' : '-high')
+      : '';
     const slugId = rawModelName
       .toLowerCase()
       .replace(/\([^)]*\)/g, '') // Remove parenthetical context info for base ID
       .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '-')
+      .replace(/-+$/, '') // Remove trailing hyphens
+      .replace(/^-/, '')  // Remove leading hyphens
       .trim();
 
     const model: Model = {
-      id: slugId || rawModelName.toLowerCase(),
+      id: (slugId || rawModelName.toLowerCase()) + contextSuffix,
       displayName: rawModelName,
       provider: 'OpenCode',
       monthlyLimitUsd: null,
