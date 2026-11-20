@@ -79,23 +79,31 @@ jobs:
           # Count records in old vs new catalog
           OLD_COUNT=$(git show HEAD:src/data/models.json | grep -c '"id"')
           NEW_COUNT=$(grep -c '"id"' src/data/models.json)
-          echo "old-count=$OLD_COUNT" >> $GITHUB_OUTPUT
-          echo "new-count=$NEW_COUNT" >> $GITHUB_OUTPUT
+          printf '%s\n' "old-count=${OLD_COUNT}" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "new-count=${NEW_COUNT}" >> "$GITHUB_OUTPUT"
 
-          # Count active vs deprecated
-          ACTIVE_COUNT=$(grep -c '"deprecated": false' src/data/models.json || echo 0)
-          DEPRECATED_COUNT=$(grep -c '"deprecated": true' src/data/models.json || echo 0)
-          echo "active-count=$ACTIVE_COUNT" >> $GITHUB_OUTPUT
-          echo "deprecated-count=$DEPRECATED_COUNT" >> $GITHUB_OUTPUT
+          # Count active vs deprecated (grep -c returns 1 exit code when count=0, so use || true)
+          ACTIVE_COUNT=$(grep -c '"deprecated": false' src/data/models.json || true)
+          DEPRECATED_COUNT=$(grep -c '"deprecated": true' src/data/models.json || true)
+          printf '%s\n' "active-count=${ACTIVE_COUNT:-0}" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "deprecated-count=${DEPRECATED_COUNT:-0}" >> "$GITHUB_OUTPUT"
 
           # Detect added models (new displayName not in old catalog)
-          git diff src/data/models.json | grep '^\+.*"displayName"' | sed 's/.*"displayName": "\(.*\)".*/\1/' | sort -u > added.txt
-          git show HEAD:src/data/models.json | grep '"displayName"' | sed 's/.*"displayName": "\(.*\)".*/\1/' | sort -u > old-names.txt
-          grep -c '.' added.txt > /dev/null 2>&1 && echo "has-added=true" >> $GITHUB_OUTPUT || echo "has-added=false" >> $GITHUB_OUTPUT
+          git diff src/data/models.json | grep '^\+.*"displayName"' | sed 's/.*"displayName": "\(.*\)".*/\1/' | sort -u > added.txt || true
+          git show HEAD:src/data/models.json | grep '"displayName"' | sed 's/.*"displayName": "\(.*\)".*/\1/' | sort -u > old-names.txt || true
+          if [ -s added.txt ]; then
+            printf '%s\n' "has-added=true" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s\n' "has-added=false" >> "$GITHUB_OUTPUT"
+          fi
 
           # Detect removed models (old displayName not in new catalog, excluding deprecated)
           grep -vxFf added.txt old-names.txt > removed-candidates.txt 2>/dev/null || true
-          grep -c '.' removed-candidates.txt > /dev/null 2>&1 && echo "has-removed=true" >> $GITHUB_OUTPUT || echo "has-removed=false" >> $GITHUB_OUTPUT
+          if [ -s removed-candidates.txt ]; then
+            printf '%s\n' "has-removed=true" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s\n' "has-removed=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Generate PR body
         id: pr-body
