@@ -1,0 +1,11 @@
+# Minimal test workflow to verify workflow_dispatch trigger functionality.
+name: Test Dispatch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "workflow_dispatch trigger works"
