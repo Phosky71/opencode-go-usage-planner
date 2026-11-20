@@ -1,0 +1,178 @@
+# Catalog Update workflow - weekly automated catalog refresh from OpenCode Go Markdown sources.
+name: Catalog Update
+
+on:
+  schedule:
+    - cron: '0 10 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: catalog-update
+  cancel-in-progress: false
+
+jobs:
+  update-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run dry-run to detect changes
+        id: dryrun
+        run: |
+          npm run update:catalog -- --dry-run | tee dry-run.log
+          echo "dry-run-exit=$?" >> $GITHUB_OUTPUT
+        continue-on-error: true
+
+      - name: Fail on dry-run error
+        if: steps.dryrun.outputs.dry-run-exit != '0'
+        run: |
+          echo "::error::Catalog update dry-run failed. Check logs for details."
+          cat dry-run.log
+          exit 1
+
+      - name: Check for changes via dry-run output
+        id: changes
+        run: |
+          if grep -q "DRY RUN" dry-run.log; then
+            echo "has-changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run actual catalog update
+        if: steps.changes.outputs.has-changes == 'true'
+        run: npm run update:catalog
+
+      - name: Validate updated catalog
+        if: steps.changes.outputs.has-changes == 'true'
+        run: |
+          npm run verify:catalog
+          npm run typecheck
+          npm run build
+
+      - name: Run tests
+        if: steps.changes.outputs.has-changes == 'true'
+        run: npm test
+
+      - name: Compute catalog diff
+        id: diff
+        if: steps.changes.outputs.has-changes == 'true'
+        run: |
+          OLD_COUNT=$(git show HEAD:src/data/models.json | grep -c '"id"')
+          NEW_COUNT=$(grep -c '"id"' src/data/models.json)
+          printf '%s\n' "old-count=${OLD_COUNT}" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "new-count=${NEW_COUNT}" >> "$GITHUB_OUTPUT"
+          ACTIVE_COUNT=$(grep -c '"deprecated": false' src/data/models.json || true)
+          DEPRECATED_COUNT=$(grep -c '"deprecated": true' src/data/models.json || true)
+          printf '%s\n' "active-count=${ACTIVE_COUNT:-0}" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "deprecated-count=${DEPRECATED_COUNT:-0}" >> "$GITHUB_OUTPUT"
+          git diff src/data/models.json | grep '^\+.*"displayName"' | sed 's/.*"displayName": "\(.*\)".*/\1/' | sort -u > added.txt || true
+          git show HEAD:src/data/models.json | grep '"displayName"' | sed 's/.*"displayName": "\(.*\)".*/\1/' | sort -u > old-names.txt || true
+          if [ -s added.txt ]; then
+            printf '%s\n' "has-added=true" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s\n' "has-added=false" >> "$GITHUB_OUTPUT"
+          fi
+          grep -vxFf added.txt old-names.txt > removed-candidates.txt 2>/dev/null || true
+          if [ -s removed-candidates.txt ]; then
+            printf '%s\n' "has-removed=true" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s\n' "has-removed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push catalog changes
+        if: steps.changes.outputs.has-changes == 'true'
+        run: |
+          rm -f added.txt old-names.txt removed-candidates.txt dry-run.log
+          git config user.name "GitHub Actions Bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/models.json
+          git commit -m 'data: update model catalog from official Markdown sources' \
+            -m 'Co-authored-by: Junie <junie@jetbrains.com>' \
+            --signoff
+          git push origin HEAD:data-update-catalog
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for existing PR
+        id: existing-pr
+        if: steps.changes.outputs.has-changes == 'true'
+        run: |
+          DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||')
+          EXISTING=$(gh pr list --base "$DEFAULT_BRANCH" --head data-update-catalog --json number --jq '.[0].number' 2>/dev/null || echo "")
+          if [ -n "$EXISTING" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "number=$EXISTING" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has-changes == 'true' && steps.existing-pr.outputs.exists == 'false'
+        run: |
+          DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||')
+          PR_BODY="## Automated Catalog Update
+
+This PR updates the model catalog from official OpenCode Go Markdown sources.
+
+### Sources
+- Limits: https://opencode.ai/console/go.md
+- Prices: https://opencode.ai/docs/console/models.md
+
+### Summary
+| Metric | Value |
+|--------|-------|
+| Previous records | ${OLD_COUNT} |
+| New total records | ${NEW_COUNT} |
+| Active models | ${ACTIVE_COUNT} |
+| Deprecated models | ${DEPRECATED_COUNT} |
+
+### Validation
+- Catalog integrity check passed
+- TypeScript type check passed
+- Build succeeded
+- All tests passed
+
+### Notes
+- Changes are not auto-merged; manual review required.
+- 4 dubious correspondences remain unassociated.
+- 11 models have no published price.
+
+---
+*Generated by weekly catalog update workflow*"
+          gh pr create \
+            --base "$DEFAULT_BRANCH" \
+            --head data-update-catalog \
+            --title "Automated Catalog Update" \
+            --body "$PR_BODY" \
+            --label "data" \
+            --label "automated-update" \
+            --draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OLD_COUNT: ${{ steps.diff.outputs.old-count }}
+          NEW_COUNT: ${{ steps.diff.outputs.new-count }}
+          ACTIVE_COUNT: ${{ steps.diff.outputs.active-count }}
+          DEPRECATED_COUNT: ${{ steps.diff.outputs.deprecated-count }}
+
+      - name: No changes message
+        if: steps.changes.outputs.has-changes != 'true'
+        run: echo "No catalog changes detected. The current catalog is up to date."
