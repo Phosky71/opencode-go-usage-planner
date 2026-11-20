@@ -1,5 +1,5 @@
 # Update Catalog workflow — weekly automated catalog refresh from OpenCode Go Markdown sources.
-# Registered: 2026-11-20 (fix: replace hardcoded `--base main` with default branch resolution).
+# Registered: 2026-11-20. Updated: 2026-11-20 (fix: use gh pr create instead of peter-evans action).
 name: Update Catalog
 
 on:
