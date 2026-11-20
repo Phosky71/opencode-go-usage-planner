@@ -1,6 +1,6 @@
-# Update Catalog workflow — weekly automated catalog refresh from OpenCode Go Markdown sources.
+# Catalog Update workflow — weekly automated catalog refresh from OpenCode Go Markdown sources.
 # Recreated: 2026-11-20 (fresh registration to resolve workflow_dispatch trigger issue).
-name: Update Catalog
+name: Catalog Update
 
 on:
   schedule:
