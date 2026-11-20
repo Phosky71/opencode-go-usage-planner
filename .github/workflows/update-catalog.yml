@@ -1,3 +1,5 @@
+# Update Catalog workflow — weekly automated catalog refresh from OpenCode Go Markdown sources.
+# Registered: 2026-11-20 (fix: replace hardcoded `--base main` with default branch resolution).
 name: Update Catalog
 
 on:
@@ -147,7 +149,8 @@ jobs:
         id: existing-pr
         if: steps.changes.outputs.has-changes == 'true'
         run: |
-          EXISTING=$(gh pr list --base main --head data-update-catalog --json number --jq '.[0].number' 2>/dev/null || echo "")
+          DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||')
+          EXISTING=$(gh pr list --base "$DEFAULT_BRANCH" --head data-update-catalog --json number --jq '.[0].number' 2>/dev/null || echo "")
           if [ -n "$EXISTING" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "number=$EXISTING" >> $GITHUB_OUTPUT
