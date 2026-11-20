@@ -1,4 +1,4 @@
-# Catalog Update workflow — weekly automated catalog refresh from OpenCode Go Markdown sources.
+# Catalog Update workflow - weekly automated catalog refresh from OpenCode Go Markdown sources.
 # Recreated: 2026-11-20 (fresh registration to resolve workflow_dispatch trigger issue).
 name: Catalog Update
 
@@ -110,7 +110,7 @@ jobs:
         if: steps.changes.outputs.has-changes == 'true'
         run: |
           cat > pr-body.md << 'EOF'
-          # 🔄 Automated Catalog Update
+          # Automated Catalog Update
 
           This PR updates the model catalog from official OpenCode Go Markdown sources.
 
@@ -127,13 +127,13 @@ jobs:
           | Deprecated models | ${{ steps.diff.outputs.deprecated-count }} |
 
           ## Validation
-          - ✅ Catalog integrity check passed
-          - ✅ TypeScript type check passed
-          - ✅ Build succeeded
-          - ✅ All tests passed
-          - ✅ No duplicate IDs
-          - ✅ Dubious correspondences not associated
-          - ✅ Unknown prices not converted to zero
+          - [x] Catalog integrity check passed
+          - [x] TypeScript type check passed
+          - [x] Build succeeded
+          - [x] All tests passed
+          - [x] No duplicate IDs
+          - [x] Dubious correspondences not associated
+          - [x] Unknown prices not converted to zero
 
           ## Review Checklist
           - [ ] Review added/modified models in `src/data/models.json`
@@ -145,7 +145,7 @@ jobs:
           - This PR was generated automatically by the weekly catalog update workflow.
           - Changes are **not** auto-merged; manual review and approval are required.
           - A backup of the previous catalog is available as `src/data/models.json.backup`.
-          - 4 dubious correspondences remain unassociated (DeepSeek V4.1 Flash 1017, Muse Spark Contributor ×2, Iceman Contributor Free).
+          - 4 dubious correspondences remain unassociated (DeepSeek V4.1 Flash 1017, Muse Spark Contributor x2, Iceman Contributor Free).
           - 11 models have no published price and are included with `priceInputUsd: undefined`.
 
           ---
@@ -191,7 +191,7 @@ jobs:
           DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's|refs/remotes/origin/||')
 
           # Build PR body from diff stats
-          PR_BODY="## 🔄 Automated Catalog Update
+          PR_BODY="## Automated Catalog Update
 
 This PR updates the model catalog from official OpenCode Go Markdown sources.
 
@@ -208,13 +208,13 @@ This PR updates the model catalog from official OpenCode Go Markdown sources.
 | Deprecated models | ${DEPRECATED_COUNT} |
 
 ### Validation
-- ✅ Catalog integrity check passed
-- ✅ TypeScript type check passed
-- ✅ Build succeeded
-- ✅ All tests passed
-- ✅ No duplicate IDs
-- ✅ Dubious correspondences not associated
-- ✅ Unknown prices not converted to zero
+- [x] Catalog integrity check passed
+- [x] TypeScript type check passed
+- [x] Build succeeded
+- [x] All tests passed
+- [x] No duplicate IDs
+- [x] Dubious correspondences not associated
+- [x] Unknown prices not converted to zero
 
 ### Review Checklist
 - [ ] Review added/modified models in \`src/data/models.json\`
@@ -233,7 +233,7 @@ This PR updates the model catalog from official OpenCode Go Markdown sources.
           gh pr create \
             --base "$DEFAULT_BRANCH" \
             --head data-update-catalog \
-            --title "🔄 Automated Catalog Update" \
+            --title "Automated Catalog Update" \
             --body "$PR_BODY" \
             --label "data" \
             --label "automated-update" \
@@ -247,4 +247,4 @@ This PR updates the model catalog from official OpenCode Go Markdown sources.
 
       - name: No changes message
         if: steps.changes.outputs.has-changes != 'true'
-        run: echo "ℹ️ No catalog changes detected. The current catalog is up to date."
+        run: echo "No catalog changes detected. The current catalog is up to date."
